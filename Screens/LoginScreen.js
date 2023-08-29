@@ -45,13 +45,12 @@ export default function LoginScreen() {
           <TouchableOpacity style={styles.buttonLogin}>
             <Text>Увійти</Text>
           </TouchableOpacity>
-
-          <Text style={styles.textReg}>
-            Немає акаунту?
+          <View style={styles.divReg}>
+            <Text style={styles.textReg}>Немає акаунту?</Text>
             <TouchableOpacity>
-              <Text>Зареєструватися</Text>
+              <Text style={styles.linkReg}>Зареєструватися</Text>
             </TouchableOpacity>
-          </Text>
+          </View>
         </View>
       </ImageBackground>
     </View>
@@ -110,20 +109,23 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     marginTop: 43,
   },
-  textReg: {
-    alignItems: "center",
+
+  divReg: {
     marginTop: 16,
     marginBottom: 45,
+    flexDirection: "row",
+
+    justifyContent: "center",
+  },
+  textReg: {
     color: "rgba(27, 67, 113, 1)",
-    textAlign: "center",
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+    marginRight: 5,
+  },
+  linkReg: {
+    color: "rgba(27, 67, 113, 1)",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
   },
-  //  textLogIn: {
-  //    color: "rgba(27, 67, 113, 1)",
-  //    textAlign: "center",
-  //    fontSize: 16,
-  //    fontFamily: "Roboto-Regular",
-  //    justifyContent: "center",
-  //  },
 });
