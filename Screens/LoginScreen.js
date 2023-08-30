@@ -70,7 +70,9 @@ const styles = StyleSheet.create({
   form: {
     backgroundColor: "rgba(255, 255, 255, 1)",
     paddingHorizontal: 16,
-    maxHeight: 550,
+    maxHeight: 490,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
   },
   divAva: {
     alignItems: "center",
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
     color: "rgba(33, 33, 33, 1)",
     textAlign: "center",
     fontSize: 30,
-    marginTop: 92,
+    marginTop: 32,
     marginBottom: 16,
     fontFamily: "Roboto-Medium",
   },
@@ -112,9 +114,8 @@ const styles = StyleSheet.create({
 
   divReg: {
     marginTop: 16,
-    marginBottom: 45,
+    marginBottom: 64,
     flexDirection: "row",
-
     justifyContent: "center",
   },
   textReg: {

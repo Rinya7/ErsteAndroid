@@ -97,6 +97,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 1)",
     paddingHorizontal: 16,
     maxHeight: 550,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
   },
   divAva: {
     alignItems: "center",
