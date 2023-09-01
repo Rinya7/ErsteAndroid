@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -5,81 +6,91 @@ import {
   ImageBackground,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
   Image,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { useFonts } from "expo-font";
 
 export default function RegistrationScreen() {
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  console.log(email);
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/images/bg.jpg")}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <View style={styles.form}>
-          <View style={[styles.divAva]}>
-            <Image
-              source={require("../assets/images/default.jpg")}
-              style={[
-                styles.avatar,
-                {
-                  transform: [{ translateY: -50 }],
-                },
-              ]}
-            ></Image>
-            <TouchableOpacity
-              style={[
-                styles.add,
-                {
-                  transform: [{ translateX: 60 }, { translateY: 30 }],
-                },
-              ]}
-            >
-              <Image source={require("../assets/images/add.png")}></Image>
+    <KeyboardAvoidingView
+      //  behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ImageBackground
+          source={require("../assets/images/bg.jpg")}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <View style={styles.form}>
+            <View style={[styles.divAva]}>
+              <Image
+                source={require("../assets/images/default.jpg")}
+                style={[
+                  styles.avatar,
+                  {
+                    transform: [{ translateY: -50 }],
+                  },
+                ]}
+              ></Image>
+              <TouchableOpacity
+                style={[
+                  styles.add,
+                  {
+                    transform: [{ translateX: 60 }, { translateY: 30 }],
+                  },
+                ]}
+              >
+                <Image source={require("../assets/images/add.png")}></Image>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.textTitle}>Реєстрація</Text>
+            <View style={styles.inputDiv}>
+              <TextInput
+                style={styles.input}
+                placeholder={"Логін"}
+                textContentType={"name"}
+                autoComplete={"name"}
+                textAlign={"left"}
+                value={name}
+                onChangeText={setName}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder={"Адреса електронної пошти"}
+                textContentType={"emailAddress"}
+                autoComplete={"email"}
+                textAlign={"left"}
+                value={email}
+                onChangeText={setEmail}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder={"Пароль"}
+                textContentType={"password"}
+                textAlign={"left"}
+                secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
+            <TouchableOpacity style={styles.buttonReg}>
+              <Text>Зареєстуватися</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonIn}>
+              <Text style={styles.textLogIn}>Вже є акаунт? Увійти</Text>
             </TouchableOpacity>
           </View>
-
-          <Text style={styles.textTitle}>Реєстрація</Text>
-          <View style={styles.inputDiv}>
-            <TextInput
-              style={styles.input}
-              placeholder={"Логін"}
-              textContentType={"name"}
-              autoComplete={"name"}
-              textAlign={"left"}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder={"Адреса електронної пошти"}
-              textContentType={"emailAddress"}
-              autoComplete={"email"}
-              textAlign={"left"}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder={"Пароль"}
-              textContentType={"password"}
-              textAlign={"left"}
-              secureTextEntry={true}
-            />
-          </View>
-          <TouchableOpacity style={styles.buttonReg}>
-            <Text>Зареєстуватися</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonIn}>
-            <Text style={styles.textLogIn}>Вже є акаунт? Увійти</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -5,11 +5,16 @@ import {
   ImageBackground,
   TextInput,
   TouchableOpacity,
-  Image,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useFonts } from "expo-font";
+import { useState } from "react";
 
 export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
@@ -17,43 +22,53 @@ export default function LoginScreen() {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/images/bg.jpg")}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <View style={styles.form}>
-          <Text style={styles.textTitle}>Увійти</Text>
-          <View style={styles.inputDiv}>
-            <TextInput
-              style={styles.input}
-              placeholder={"Адреса електронної пошти"}
-              textContentType={"emailAddress"}
-              autoComplete={"email"}
-              textAlign={"left"}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder={"Пароль"}
-              textContentType={"password"}
-              textAlign={"left"}
-              secureTextEntry={true}
-            />
-          </View>
-          <TouchableOpacity style={styles.buttonLogin}>
-            <Text>Увійти</Text>
-          </TouchableOpacity>
-          <View style={styles.divReg}>
-            <Text style={styles.textReg}>Немає акаунту?</Text>
-            <TouchableOpacity>
-              <Text style={styles.linkReg}>Зареєструватися</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ImageBackground
+          source={require("../assets/images/bg.jpg")}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <View style={styles.form}>
+            <Text style={styles.textTitle}>Увійти</Text>
+            <View style={styles.inputDiv}>
+              <TextInput
+                style={styles.input}
+                placeholder={"Адреса електронної пошти"}
+                textContentType={"emailAddress"}
+                autoComplete={"email"}
+                textAlign={"left"}
+                value={email}
+                onChangeText={setEmail}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder={"Пароль"}
+                textContentType={"password"}
+                textAlign={"left"}
+                secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
+            <TouchableOpacity style={styles.buttonLogin}>
+              <Text>Увійти</Text>
             </TouchableOpacity>
+            <View style={styles.divReg}>
+              <Text style={styles.textReg}>Немає акаунту?</Text>
+              <TouchableOpacity>
+                <Text style={styles.linkReg}>Зареєструватися</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
