@@ -1,10 +1,16 @@
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Button } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Text } from "react-native";
 import RegistrationScreen from "./Screens/RegistrationScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import { useFonts } from "expo-font";
 
-export default function App() {
+const MainStack = createStackNavigator(); // вказує на групу навігаторів
+
+export default () => {
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -14,13 +20,40 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <RegistrationScreen></RegistrationScreen>
-      {/*<LoginScreen></LoginScreen>*/}
-      {/*<Text>Реєстрація</Text>*/}
-      <StatusBar style="auto" />
+      <NavigationContainer>
+        <MainStack.Navigator initialRouteName="Login">
+          <MainStack.Screen
+            name="Registration"
+            component={RegistrationScreen}
+          />
+          <MainStack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              title: "Start screen",
+              headerStyle: {
+                backgroundColor: "#f4511e",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                fontSize: 20,
+              },
+              headerRight: () => (
+                <Button
+                  onPress={() => alert("This is a button!")}
+                  title="Press me"
+                  color="#fff"
+                />
+              ),
+            }}
+          />
+        </MainStack.Navigator>
+        <StatusBar style="auto" />
+      </NavigationContainer>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

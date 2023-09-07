@@ -11,8 +11,10 @@ import {
 } from "react-native";
 import { useFonts } from "expo-font";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-export default function LoginScreen() {
+const LoginScreen = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -57,7 +59,9 @@ export default function LoginScreen() {
             </TouchableOpacity>
             <View style={styles.divReg}>
               <Text style={styles.textReg}>Немає акаунту?</Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Registration")}
+              >
                 <Text style={styles.linkReg}>Зареєструватися</Text>
               </TouchableOpacity>
             </View>
@@ -66,7 +70,7 @@ export default function LoginScreen() {
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -126,6 +130,7 @@ const styles = StyleSheet.create({
   divReg: {
     marginTop: 16,
     marginBottom: 64,
+
     flexDirection: "row",
     justifyContent: "center",
   },
@@ -141,3 +146,5 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
 });
+
+export default LoginScreen;

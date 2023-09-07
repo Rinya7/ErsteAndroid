@@ -9,16 +9,20 @@ import {
   KeyboardAvoidingView,
   Image,
   Keyboard,
+  Alert,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-export default function RegistrationScreen() {
+const RegistrationScreen = () => {
+  const navigation = useNavigation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const signIn = () => {
     console.log({ name, email, password });
   };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -87,7 +91,10 @@ export default function RegistrationScreen() {
             <TouchableOpacity style={styles.buttonReg} onPress={signIn}>
               <Text>Зареєстуватися</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonIn}>
+            <TouchableOpacity
+              style={styles.buttonIn}
+              onPress={() => navigation.navigate("Login")}
+            >
               <Text style={styles.textLogIn}>Вже є акаунт? Увійти</Text>
             </TouchableOpacity>
           </View>
@@ -95,7 +102,7 @@ export default function RegistrationScreen() {
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -163,3 +170,5 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
 });
+
+export default RegistrationScreen;
