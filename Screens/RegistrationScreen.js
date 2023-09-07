@@ -20,11 +20,11 @@ export default function RegistrationScreen() {
     console.log({ name, email, password });
   };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <ImageBackground
           source={require("../assets/images/bg.jpg")}
           resizeMode="cover"
@@ -92,8 +92,8 @@ export default function RegistrationScreen() {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 

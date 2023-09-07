@@ -20,11 +20,11 @@ export default function LoginScreen() {
     console.log({ email, password });
   };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <ImageBackground
           source={require("../assets/images/bg.jpg")}
           resizeMode="cover"
@@ -63,8 +63,8 @@ export default function LoginScreen() {
             </View>
           </View>
         </ImageBackground>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
