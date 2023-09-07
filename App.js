@@ -12,11 +12,11 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  console.log("null:", null);
+  //  console.log("null:", null);
   return (
     <View style={styles.container}>
-      <RegistrationScreen></RegistrationScreen>
-      {/*<LoginScreen></LoginScreen>*/}
+      {/*<RegistrationScreen></RegistrationScreen>*/}
+      <LoginScreen></LoginScreen>
       {/*<Text>Реєстрація</Text>*/}
       <StatusBar style="auto" />
     </View>

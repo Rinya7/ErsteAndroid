@@ -15,17 +15,19 @@ import { useState } from "react";
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
-
+  //  const [fontsLoaded] = useFonts({
+  //    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+  //    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
+  //  });
+  //  if (!fontsLoaded) {
+  //    return null;
+  //  }
+  const signIn = () => {
+    console.log({ email, password });
+  };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      //  behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -56,7 +58,7 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
               />
             </View>
-            <TouchableOpacity style={styles.buttonLogin}>
+            <TouchableOpacity style={styles.buttonLogin} onPress={signIn}>
               <Text>Увійти</Text>
             </TouchableOpacity>
             <View style={styles.divReg}>

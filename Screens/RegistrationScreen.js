@@ -16,7 +16,9 @@ export default function RegistrationScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(email);
+  const signIn = () => {
+    console.log({ name, email, password });
+  };
   return (
     <KeyboardAvoidingView
       //  behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -75,13 +77,14 @@ export default function RegistrationScreen() {
                 style={styles.input}
                 placeholder={"Пароль"}
                 textContentType={"password"}
+                autoComplete="password"
                 textAlign={"left"}
                 secureTextEntry={true}
                 value={password}
                 onChangeText={setPassword}
               />
             </View>
-            <TouchableOpacity style={styles.buttonReg}>
+            <TouchableOpacity style={styles.buttonReg} onPress={signIn}>
               <Text>Зареєстуватися</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonIn}>
