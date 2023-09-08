@@ -9,7 +9,6 @@ import {
   KeyboardAvoidingView,
   Image,
   Keyboard,
-  Alert,
   TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +19,7 @@ const RegistrationScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const signIn = () => {
+    navigation.navigate("Home");
     console.log({ name, email, password });
   };
 
