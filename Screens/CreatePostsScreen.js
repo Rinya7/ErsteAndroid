@@ -36,14 +36,14 @@ const CreatePostsScreen = () => {
             style={styles.input}
             placeholder={"Назва..."}
             textContentType={"name"}
-            autoComplete={"text"}
+            autoComplete={"name"}
             textAlign={"left"}
           />
 
           <TextInput
             style={styles.input}
             placeholder={"Місцевість"}
-            textContentType={"location"}
+            autoComplete={"country"}
             textAlign={"left"}
           />
         </View>

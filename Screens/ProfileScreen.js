@@ -8,7 +8,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
+const LogOut = ({ navigation }) => {
+  navigation.navigate("Login");
+  console.log("Hello");
+};
+
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   return (
     <View
       style={styles.container}
@@ -20,21 +28,28 @@ const ProfileScreen = () => {
         style={styles.image}
       >
         <View style={styles.card}>
+          <TouchableOpacity onPress={() => LogOut({ navigation })}>
+            <Image
+              source={require("../assets/images/logout.png")}
+              style={styles.logOut}
+            ></Image>
+          </TouchableOpacity>
           <View style={[styles.divAva]}>
             <Image
               source={require("../assets/images/default.jpg")}
               style={[
                 styles.avatar,
                 {
-                  transform: [{ translateY: -50 }],
+                  transform: [{ translateY: -60 }],
                 },
               ]}
             ></Image>
+
             <TouchableOpacity
               style={[
                 styles.del,
                 {
-                  transform: [{ translateX: 60 }, { translateY: 30 }],
+                  transform: [{ translateX: 70 }, { translateY: 16 }],
                 },
               ]}
             >
@@ -102,7 +117,21 @@ const styles = StyleSheet.create({
   },
   avatar: {
     borderRadius: 16,
+    width: 140,
+    height: 120,
     position: "absolute",
+  },
+  del: {
+    //position: "absolute",
+    //right: 0,
+    //marginTop: 22,
+  },
+  logOut: {
+    width: 24,
+    height: 24,
+    position: "absolute",
+    right: 0,
+    marginTop: 22,
   },
 
   textTitle: {

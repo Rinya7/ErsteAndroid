@@ -1,14 +1,15 @@
 import * as React from "react";
-import { View, Image } from "react-native";
+import { View, Image, TouchableOpacity, Button, Text } from "react-native";
 
 import { useRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./ProfileScreen";
-
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 
-function Posts({ navigation }) {
+import { useNavigation } from "@react-navigation/native";
+
+function Posts() {
   return (
     <View style={{ flex: 1 }}>
       <PostsScreen> </PostsScreen>
@@ -17,10 +18,24 @@ function Posts({ navigation }) {
 }
 
 function CreatePost({ navigation }) {
-  navigation.navigate("CreatePosts");
+  //  navigation.navigate("CreatePosts");
+  return (
+    <View>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Feed"
+        onPress={() => navigation.navigate("CreatePosts")}
+      />
+    </View>
+  );
 }
 
-function Profile({ navigation }) {
+const LogOut = ({ navigation }) => {
+  navigation.navigate("Login");
+  console.log("Hello");
+};
+
+function Profile() {
   return (
     <View style={{ flex: 1 }}>
       <ProfileScreen> </ProfileScreen>
@@ -31,6 +46,7 @@ function Profile({ navigation }) {
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
+  const navigation = useNavigation();
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -38,6 +54,18 @@ const Home = () => {
         options={{
           title: "Публікації",
           headerTitleAlign: "center",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => LogOut({ navigation })}>
+              <Image
+                source={require("../assets/images/logout.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  marginRight: 16,
+                }}
+              ></Image>
+            </TouchableOpacity>
+          ),
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
             <Image

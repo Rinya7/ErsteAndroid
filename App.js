@@ -22,7 +22,6 @@ export default () => {
   }
   return (
     <NavigationContainer>
-      {/*<View style={styles.container}>*/}
       <MainStack.Navigator initialRouteName="Login">
         <MainStack.Screen
           name="Login"
@@ -33,7 +32,7 @@ export default () => {
           name="Registration"
           options={{ headerShown: false }}
           component={RegistrationScreen}
-        />
+        ></MainStack.Screen>
 
         <MainStack.Screen
           name="Home"
@@ -42,12 +41,10 @@ export default () => {
         />
         <MainStack.Screen
           name="CreatePosts"
-          options={{ headerShown: false }}
+          //  options={{ headerShown: false }}
           component={CreatePostsScreen}
         />
       </MainStack.Navigator>
-      {/*<StatusBar style="auto" />*/}
-      {/*</View>*/}
     </NavigationContainer>
   );
 };
