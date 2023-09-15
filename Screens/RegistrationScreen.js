@@ -11,14 +11,23 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-export default function RegistrationScreen() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const baseLogState = {
+  name: "",
+  email: "",
+  password: "",
+};
+
+const RegistrationScreen = () => {
+  const navigation = useNavigation();
+  const [logState, setLogState] = useState(baseLogState);
   const signIn = () => {
-    console.log({ name, email, password });
+    navigation.navigate("Home");
+    console.log(logState);
+    setLogState(logState);
   };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -61,8 +70,10 @@ export default function RegistrationScreen() {
                 textContentType={"name"}
                 autoComplete={"name"}
                 textAlign={"left"}
-                value={name}
-                onChangeText={setName}
+                value={logState.name}
+                onChangeText={(value) =>
+                  setLogState((prevState) => ({ ...prevState, name: value }))
+                }
               />
               <TextInput
                 style={styles.input}
@@ -70,8 +81,10 @@ export default function RegistrationScreen() {
                 textContentType={"emailAddress"}
                 autoComplete={"email"}
                 textAlign={"left"}
-                value={email}
-                onChangeText={setEmail}
+                value={logState.email}
+                onChangeText={(value) =>
+                  setLogState((prevState) => ({ ...prevState, email: value }))
+                }
               />
               <TextInput
                 style={styles.input}
@@ -80,14 +93,22 @@ export default function RegistrationScreen() {
                 autoComplete="password"
                 textAlign={"left"}
                 secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
+                value={logState.password}
+                onChangeText={(value) =>
+                  setLogState((prevState) => ({
+                    ...prevState,
+                    password: value,
+                  }))
+                }
               />
             </View>
             <TouchableOpacity style={styles.buttonReg} onPress={signIn}>
               <Text>Зареєстуватися</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonIn}>
+            <TouchableOpacity
+              style={styles.buttonIn}
+              onPress={() => navigation.navigate("LoginScreen")}
+            >
               <Text style={styles.textLogIn}>Вже є акаунт? Увійти</Text>
             </TouchableOpacity>
           </View>
@@ -95,7 +116,7 @@ export default function RegistrationScreen() {
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -163,3 +184,5 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
 });
+
+export default RegistrationScreen;

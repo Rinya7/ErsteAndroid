@@ -9,15 +9,23 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { useFonts } from "expo-font";
-import { useState } from "react";
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+
+const initialState = {
+  email: "",
+  password: "",
+};
+
+const LoginScreen = () => {
+  const navigation = useNavigation();
+  const [state, setState] = useState(initialState);
 
   const signIn = () => {
-    console.log({ email, password });
+    navigation.navigate("Home");
+    console.log(state);
+    setState(initialState);
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -39,8 +47,10 @@ export default function LoginScreen() {
                 textContentType={"emailAddress"}
                 autoComplete={"email"}
                 textAlign={"left"}
-                value={email}
-                onChangeText={setEmail}
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, email: value }))
+                }
               />
               <TextInput
                 style={styles.input}
@@ -48,8 +58,11 @@ export default function LoginScreen() {
                 textContentType={"password"}
                 textAlign={"left"}
                 secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
+                value={state.password}
+                //onChangeText={setPassword}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, password: value }))
+                }
               />
             </View>
             <TouchableOpacity style={styles.buttonLogin} onPress={signIn}>
@@ -57,7 +70,9 @@ export default function LoginScreen() {
             </TouchableOpacity>
             <View style={styles.divReg}>
               <Text style={styles.textReg}>Немає акаунту?</Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("RegistrationScreen")}
+              >
                 <Text style={styles.linkReg}>Зареєструватися</Text>
               </TouchableOpacity>
             </View>
@@ -66,7 +81,7 @@ export default function LoginScreen() {
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -126,6 +141,7 @@ const styles = StyleSheet.create({
   divReg: {
     marginTop: 16,
     marginBottom: 64,
+
     flexDirection: "row",
     justifyContent: "center",
   },
@@ -141,3 +157,5 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
 });
+
+export default LoginScreen;
