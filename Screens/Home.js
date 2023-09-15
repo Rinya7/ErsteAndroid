@@ -16,14 +16,13 @@ function Posts() {
   );
 }
 
-function CreatePost() {
+const CreatePost = () => {
   return (
-    //  navigation.navigate("CreatePostsScreen");
     <View style={{ flex: 1 }}>
       <CreatePostsScreen> </CreatePostsScreen>
     </View>
   );
-}
+};
 
 function Profile() {
   return (
@@ -38,12 +37,21 @@ const LogOut = ({ navigation }) => {
   console.log("Hello");
 };
 
+const LogBack = ({ navigation }) => {
+  navigation.goBack();
+  console.log("Hello");
+};
+
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
   const navigation = useNavigation();
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: { display: "undefined" },
+      }}
+    >
       <Tab.Screen
         name="Posts"
         options={{
@@ -81,8 +89,20 @@ const Home = () => {
         options={{
           title: "Створити публікацію",
           headerTitleAlign: "center",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => LogBack({ navigation })}>
+              <Image
+                source={require("../assets/images/arrowLeft.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  marginLeft: 16,
+                }}
+              ></Image>
+            </TouchableOpacity>
+          ),
           tabBarShowLabel: false,
-
+          tabBarStyle: { display: "none" },
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/images/new.png")}
