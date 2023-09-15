@@ -1,12 +1,11 @@
 import * as React from "react";
-import { View, Image, TouchableOpacity, Button, Text } from "react-native";
-
-import { useRoute } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { View, Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./ProfileScreen";
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
-
+const MainStack = createStackNavigator(); // вказує на групу навігаторів
 import { useNavigation } from "@react-navigation/native";
 
 function Posts() {
@@ -17,23 +16,14 @@ function Posts() {
   );
 }
 
-function CreatePost({ navigation }) {
-  //  navigation.navigate("CreatePosts");
+function CreatePost() {
   return (
-    <View>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Feed"
-        onPress={() => navigation.navigate("CreatePosts")}
-      />
+    //  navigation.navigate("CreatePostsScreen");
+    <View style={{ flex: 1 }}>
+      <CreatePostsScreen> </CreatePostsScreen>
     </View>
   );
 }
-
-const LogOut = ({ navigation }) => {
-  navigation.navigate("Login");
-  console.log("Hello");
-};
 
 function Profile() {
   return (
@@ -42,6 +32,11 @@ function Profile() {
     </View>
   );
 }
+
+const LogOut = ({ navigation }) => {
+  navigation.navigate("LoginScreen");
+  console.log("Hello");
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -86,8 +81,8 @@ const Home = () => {
         options={{
           title: "Створити публікацію",
           headerTitleAlign: "center",
-          //  headerShown: false,
           tabBarShowLabel: false,
+
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/images/new.png")}
@@ -107,6 +102,7 @@ const Home = () => {
         options={{
           headerShown: false,
           tabBarShowLabel: false,
+
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/images/user.png")}

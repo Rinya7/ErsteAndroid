@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonPublic: {
-    backgroundColor: "#FF6C00",
+    backgroundColor: "#F6F6F6",
     maxHeight: 50,
     borderRadius: 100,
     alignItems: "center",

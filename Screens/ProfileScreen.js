@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   Image,
-  Button,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
@@ -11,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 const LogOut = ({ navigation }) => {
-  navigation.navigate("Login");
+  navigation.navigate("LoginScreen");
   console.log("Hello");
 };
 

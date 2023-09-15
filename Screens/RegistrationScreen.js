@@ -13,14 +13,19 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+const baseLogState = {
+  name: "",
+  email: "",
+  password: "",
+};
+
 const RegistrationScreen = () => {
   const navigation = useNavigation();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [logState, setLogState] = useState(baseLogState);
   const signIn = () => {
     navigation.navigate("Home");
-    console.log({ name, email, password });
+    console.log(logState);
+    setLogState(logState);
   };
 
   return (
@@ -65,8 +70,10 @@ const RegistrationScreen = () => {
                 textContentType={"name"}
                 autoComplete={"name"}
                 textAlign={"left"}
-                value={name}
-                onChangeText={setName}
+                value={logState.name}
+                onChangeText={(value) =>
+                  setLogState((prevState) => ({ ...prevState, name: value }))
+                }
               />
               <TextInput
                 style={styles.input}
@@ -74,8 +81,10 @@ const RegistrationScreen = () => {
                 textContentType={"emailAddress"}
                 autoComplete={"email"}
                 textAlign={"left"}
-                value={email}
-                onChangeText={setEmail}
+                value={logState.email}
+                onChangeText={(value) =>
+                  setLogState((prevState) => ({ ...prevState, email: value }))
+                }
               />
               <TextInput
                 style={styles.input}
@@ -84,8 +93,13 @@ const RegistrationScreen = () => {
                 autoComplete="password"
                 textAlign={"left"}
                 secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
+                value={logState.password}
+                onChangeText={(value) =>
+                  setLogState((prevState) => ({
+                    ...prevState,
+                    password: value,
+                  }))
+                }
               />
             </View>
             <TouchableOpacity style={styles.buttonReg} onPress={signIn}>
@@ -93,7 +107,7 @@ const RegistrationScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonIn}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("LoginScreen")}
             >
               <Text style={styles.textLogIn}>Вже є акаунт? Увійти</Text>
             </TouchableOpacity>

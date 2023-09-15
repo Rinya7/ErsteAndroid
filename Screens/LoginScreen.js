@@ -9,18 +9,23 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-//import { useFonts } from "expo-font";
+
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
+const initialState = {
+  email: "",
+  password: "",
+};
+
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [state, setState] = useState(initialState);
 
   const signIn = () => {
     navigation.navigate("Home");
-    console.log({ email, password });
+    console.log(state);
+    setState(initialState);
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -42,8 +47,10 @@ const LoginScreen = () => {
                 textContentType={"emailAddress"}
                 autoComplete={"email"}
                 textAlign={"left"}
-                value={email}
-                onChangeText={setEmail}
+                value={state.email}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, email: value }))
+                }
               />
               <TextInput
                 style={styles.input}
@@ -51,8 +58,11 @@ const LoginScreen = () => {
                 textContentType={"password"}
                 textAlign={"left"}
                 secureTextEntry={true}
-                value={password}
-                onChangeText={setPassword}
+                value={state.password}
+                //onChangeText={setPassword}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, password: value }))
+                }
               />
             </View>
             <TouchableOpacity style={styles.buttonLogin} onPress={signIn}>
@@ -61,7 +71,7 @@ const LoginScreen = () => {
             <View style={styles.divReg}>
               <Text style={styles.textReg}>Немає акаунту?</Text>
               <TouchableOpacity
-                onPress={() => navigation.navigate("Registration")}
+                onPress={() => navigation.navigate("RegistrationScreen")}
               >
                 <Text style={styles.linkReg}>Зареєструватися</Text>
               </TouchableOpacity>
