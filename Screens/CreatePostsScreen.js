@@ -7,7 +7,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 const CreatePostsScreen = () => {
+  const navigation = useNavigation();
+
+  const LogBack = ({ navigation }) => {
+    navigation.goBack();
+    console.log("Hello");
+  };
   return (
     <View
       style={styles.container}
@@ -49,6 +57,12 @@ const CreatePostsScreen = () => {
         </View>
         <TouchableOpacity style={styles.buttonPublic}>
           <Text>Опублікувати</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deletePost}
+          onPress={() => LogBack({ navigation })}
+        >
+          <Image source={require("../assets/images/trash.png")}></Image>
         </TouchableOpacity>
       </View>
     </View>
@@ -96,6 +110,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     marginTop: 32,
+  },
+  deletePost: {
+    //display: "flex",
+    width: 70,
+    height: 40,
+    marginTop: 70,
+    marginLeft: "auto",
+    marginRight: "auto",
+    justifyContent: "flex-end",
   },
 });
 
