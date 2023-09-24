@@ -24,7 +24,6 @@ const RegistrationScreen = () => {
   const [logState, setLogState] = useState(baseLogState);
   const signIn = () => {
     navigation.navigate("Home");
-    console.log(logState);
     setLogState(logState);
   };
 

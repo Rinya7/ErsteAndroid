@@ -1,71 +1,190 @@
 import {
+  Camera,
+  //CameraType
+} from "expo-camera";
+import * as Location from "expo-location";
+//import { useIsFocused } from "@react-navigation/native";
+
+import {
   Text,
+  Button,
   View,
   StyleSheet,
   Image,
   TextInput,
   TouchableOpacity,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+
+//Шаблон публикации
+const basePost = {
+  namePlace: "",
+  nameLocation: "",
+  gps: "",
+};
+//const navigation = useNavigation();
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
+  //  const isFocused = useIsFocused();
+
+  const [permissionCam, requestPermissionCam] = Camera.useCameraPermissions();
+  const [camera, setCamera] = useState(null);
+  const [photo, setPhoto] = useState("");
+  const [postTitles, setPostTitles] = useState(basePost);
+  const [disableBtn, setDisableBtn] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (
+      postTitles.namePlace.length !== 0 &&
+      postTitles.nameLocation.length !== 0 &&
+      postTitles.gps.length !== 0
+    ) {
+      setDisableBtn(false);
+    }
+  }, [postTitles]);
 
   const LogBack = ({ navigation }) => {
     navigation.goBack();
-    console.log("Hello");
   };
-  return (
-    <View
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.post}>
-        <View style={styles.foto}>
-          <Image
-            source={require("../assets/images/defaultPostFoto.jpg")}
-            style={styles.defaultPostFoto}
-          ></Image>
-          <TouchableOpacity
-            style={[
-              styles.addFoto,
-              {
-                transform: [{ translateX: 150 }, { translateY: 100 }],
-              },
-            ]}
-          >
-            <Image source={require("../assets/images/addFoto.png")}></Image>
-          </TouchableOpacity>
-          <Text style={styles.download}>Завантажте фото</Text>
-        </View>
-        <View style={styles.inputDiv}>
-          <TextInput
-            style={styles.input}
-            placeholder={"Назва..."}
-            textContentType={"name"}
-            autoComplete={"name"}
-            textAlign={"left"}
-          />
 
-          <TextInput
-            style={styles.input}
-            placeholder={"Місцевість"}
-            autoComplete={"country"}
-            textAlign={"left"}
-          />
-        </View>
-        <TouchableOpacity style={styles.buttonPublic}>
-          <Text>Опублікувати</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.deletePost}
-          onPress={() => LogBack({ navigation })}
-        >
-          <Image source={require("../assets/images/trash.png")}></Image>
-        </TouchableOpacity>
+  if (!permissionCam) {
+    // Camera permissions are still loading
+    return <View />;
+  }
+
+  if (!permissionCam.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermissionCam} title="grant permission" />
       </View>
-    </View>
+    );
+  }
+
+  const takePhoto = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+    const { uri } = await camera.takePictureAsync();
+    setPhoto(uri);
+    //Location by foto
+    const location = await Location.getCurrentPositionAsync();
+    console.log("latitude:", location.coords.latitude);
+    console.log("longitude:", location.coords.longitude);
+    setPostTitles((prevState) => ({
+      ...prevState,
+      gps: `${location.coords.latitude} ${location.coords.longitude}`,
+    }));
+  };
+
+  const publickPost = ({ navigation }) => {
+    console.log("postTitles:", postTitles);
+    //console.log("navigation:", navigation.navigate);
+    //navigation.navigate("Home");
+    setPostTitles(basePost);
+  };
+
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <View style={styles.post}>
+          <View style={styles.pictures}>
+            {/*{isFocused && (*/}
+            <Camera
+              style={styles.camera}
+              //type={type}
+              ref={setCamera}
+            >
+              {photo && (
+                <View style={styles.takedFotoContainer}>
+                  <Image
+                    source={{ uri: photo }}
+                    style={styles.makedFoto}
+                  ></Image>
+                </View>
+              )}
+              <TouchableOpacity style={styles.addFoto} onPress={takePhoto}>
+                <Image source={require("../assets/images/addFoto.png")}></Image>
+              </TouchableOpacity>
+            </Camera>
+            {/*)}*/}
+
+            <Text style={styles.download}>Завантажте фото</Text>
+          </View>
+          <View style={styles.inputDiv}>
+            <TextInput
+              style={styles.input}
+              placeholder={"Назва..."}
+              textContentType={"name"}
+              autoComplete={"name"}
+              textAlign={"left"}
+              value={postTitles.namePlace}
+              onChangeText={(value) =>
+                setPostTitles((prevState) => ({
+                  ...prevState,
+                  namePlace: value,
+                }))
+              }
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder={"Місцевість"}
+              autoComplete={"country"}
+              textAlign={"left"}
+              value={postTitles.nameLocation}
+              onChangeText={(value) =>
+                setPostTitles((prevState) => ({
+                  ...prevState,
+                  nameLocation: value,
+                }))
+              }
+            />
+          </View>
+          <TouchableOpacity
+            disabled={disableBtn}
+            style={[
+              styles.buttonPublic,
+              { backgroundColor: disableBtn ? "#F6F6F6" : "#FF6C00" },
+            ]}
+            onPress={() => publickPost(navigation)}
+          >
+            <Text>Опублікувати</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.deletePost}
+            onPress={() => LogBack({ navigation })}
+          >
+            <Image source={require("../assets/images/trash.png")}></Image>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -75,17 +194,26 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 1)",
     paddingHorizontal: 16,
   },
-  foto: {
+  pictures: {
     paddingBottom: 32,
   },
 
-  defaultPostFoto: {
-    width: "100%",
+  camera: {
+    height: 240,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  takedFotoContainer: {
+    position: "absolute",
+  },
+  makedFoto: {
+    height: 240,
+    width: Dimensions.get("window").width * 0.91,
     borderRadius: 8,
-    position: "relative",
   },
   addFoto: {
-    position: "absolute",
+    opacity: 0.7,
   },
   download: {
     color: "rgba(189, 189, 189, 1))",
@@ -112,7 +240,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   deletePost: {
-    //display: "flex",
     width: 70,
     height: 40,
     marginTop: 70,
