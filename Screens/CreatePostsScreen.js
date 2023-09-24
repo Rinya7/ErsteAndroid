@@ -29,7 +29,7 @@ const basePost = {
   nameLocation: "",
   gps: "",
 };
-//const navigation = useNavigation();
+
 const CreatePostsScreen = () => {
   const navigation = useNavigation();
   //  const isFocused = useIsFocused();
@@ -101,9 +101,10 @@ const CreatePostsScreen = () => {
 
   const publickPost = ({ navigation }) => {
     console.log("postTitles:", postTitles);
-    //console.log("navigation:", navigation.navigate);
-    //navigation.navigate("Home");
+    console.log("navigation:", navigation);
+    //roure.navigate("Home");
     setPostTitles(basePost);
+    setPhoto("");
   };
 
   return (
@@ -172,7 +173,7 @@ const CreatePostsScreen = () => {
               styles.buttonPublic,
               { backgroundColor: disableBtn ? "#F6F6F6" : "#FF6C00" },
             ]}
-            onPress={() => publickPost(navigation)}
+            onPress={publickPost}
           >
             <Text>Опублікувати</Text>
           </TouchableOpacity>

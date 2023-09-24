@@ -19,7 +19,7 @@ function Posts() {
 const CreatePost = () => {
   return (
     <View style={{ flex: 1 }}>
-      <CreatePostsScreen navigate> </CreatePostsScreen>
+      <CreatePostsScreen> </CreatePostsScreen>
     </View>
   );
 };
