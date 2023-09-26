@@ -19,24 +19,21 @@ import {
 } from "react-native";
 
 import { Dimensions } from "react-native";
-
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 
 //Шаблон публикации
 const basePost = {
   namePlace: "",
   nameLocation: "",
-  gps: "",
+  gps: { latitude: "", longitude: "" },
+  photo: "",
 };
 
-const CreatePostsScreen = () => {
-  const navigation = useNavigation();
+const CreatePostsScreen = ({ navigation }) => {
   //  const isFocused = useIsFocused();
 
   const [permissionCam, requestPermissionCam] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState("");
   const [postTitles, setPostTitles] = useState(basePost);
   const [disableBtn, setDisableBtn] = useState(true);
 
@@ -54,7 +51,7 @@ const CreatePostsScreen = () => {
     if (
       postTitles.namePlace.length !== 0 &&
       postTitles.nameLocation.length !== 0 &&
-      postTitles.gps.length !== 0
+      postTitles.photo.length !== 0
     ) {
       setDisableBtn(false);
     }
@@ -88,22 +85,25 @@ const CreatePostsScreen = () => {
       return;
     }
     const { uri } = await camera.takePictureAsync();
-    setPhoto(uri);
-    //Location by foto
+
     const location = await Location.getCurrentPositionAsync();
-    console.log("latitude:", location.coords.latitude);
-    console.log("longitude:", location.coords.longitude);
+
     setPostTitles((prevState) => ({
       ...prevState,
-      gps: `${location.coords.latitude} ${location.coords.longitude}`,
+      gps: {
+        latitude: `${location.coords.latitude}`,
+        longitude: `${location.coords.longitude}`,
+      },
+
+      photo: uri,
     }));
   };
 
   const publickPost = () => {
-    console.log("postTitles:", postTitles);
-    navigation.replace("Home");
+    //console.log("postTitles:", postTitles);
+    navigation.navigate("DefaultScreen", postTitles);
     setPostTitles(basePost);
-    setPhoto("");
+    setDisableBtn(true);
   };
 
   return (
@@ -120,10 +120,10 @@ const CreatePostsScreen = () => {
               //type={type}
               ref={setCamera}
             >
-              {photo && (
+              {postTitles.photo.length > 0 && (
                 <View style={styles.takedFotoContainer}>
                   <Image
-                    source={{ uri: photo }}
+                    source={{ uri: postTitles.photo }}
                     style={styles.makedFoto}
                   ></Image>
                 </View>

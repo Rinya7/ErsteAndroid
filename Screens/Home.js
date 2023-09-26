@@ -30,20 +30,6 @@ const Home = () => {
       <Tab.Screen
         name="Posts"
         options={{
-          //  title: "Публікації",
-          //  headerTitleAlign: "center",
-          //  headerRight: () => (
-          //    <TouchableOpacity onPress={() => logOut({ navigation })}>
-          //      <Image
-          //        source={require("../assets/images/logout.png")}
-          //        style={{
-          //          width: 24,
-          //          height: 24,
-          //          marginRight: 16,
-          //        }}
-          //      ></Image>
-          //    </TouchableOpacity>
-          //  ),
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
             <Image

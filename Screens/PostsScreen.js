@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const NestedScreen = createNativeStackNavigator();
 
-const PostsScreen = () => {
+const PostsScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const logOut = () => {

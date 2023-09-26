@@ -1,8 +1,8 @@
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
-//import { useNavigation } from "@react-navigation/native";
 
-function DefaultPostsScreen({ navigation }) {
-  //  const navigation = useNavigation();
+const DefaultPostsScreen = ({ route, navigation }) => {
+  console.log("route.params.posts:", route.params);
+  const gps = route.params ? route.params.gps || null : null;
 
   return (
     <View
@@ -48,7 +48,13 @@ function DefaultPostsScreen({ navigation }) {
                 </TouchableOpacity>
                 <Text style={styles.likes}>154</Text>
               </View>
-              <TouchableOpacity onPress={() => navigation.navigate("Map")}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    gps,
+                  })
+                }
+              >
                 <Image
                   source={require("../../assets/images/map-pin.png")}
                 ></Image>
@@ -60,7 +66,7 @@ function DefaultPostsScreen({ navigation }) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
