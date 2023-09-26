@@ -1,13 +1,13 @@
 import "react-native-gesture-handler";
-import { NavigationContainer, useRoute } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 //import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
-import RegistrationScreen from "./Screens/RegistrationScreen";
-import LoginScreen from "./Screens/LoginScreen";
+import RegistrationScreen from "./screens/RegistrationScreen";
+import LoginScreen from "./screens/LoginScreen";
 import { useFonts } from "expo-font";
-import Home from "./Screens/Home";
-import CreatePostsScreen from "./Screens/CreatePostsScreen";
+import Home from "./screens/Home";
+
 import { useState } from "react";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів

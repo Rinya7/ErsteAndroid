@@ -1,43 +1,17 @@
 import * as React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { View, Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./ProfileScreen";
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
-const MainStack = createStackNavigator(); // вказує на групу навігаторів
 import { useNavigation } from "@react-navigation/native";
 
-function Posts() {
-  return (
-    <View style={{ flex: 1 }}>
-      <PostsScreen> </PostsScreen>
-    </View>
-  );
-}
+//const logOut = ({ navigation }) => {
+//  navigation.navigate("LoginScreen");
+//  console.log("Hello");
+//};
 
-const CreatePost = () => {
-  return (
-    <View style={{ flex: 1 }}>
-      <CreatePostsScreen> </CreatePostsScreen>
-    </View>
-  );
-};
-
-function Profile() {
-  return (
-    <View style={{ flex: 1 }}>
-      <ProfileScreen> </ProfileScreen>
-    </View>
-  );
-}
-
-const LogOut = ({ navigation }) => {
-  navigation.navigate("LoginScreen");
-  console.log("Hello");
-};
-
-const LogBack = ({ navigation }) => {
+const logBack = ({ navigation }) => {
   navigation.goBack();
   console.log("Hello");
 };
@@ -50,25 +24,26 @@ const Home = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { display: "undefined" },
+        headerShown: false,
       }}
     >
       <Tab.Screen
         name="Posts"
         options={{
-          title: "Публікації",
-          headerTitleAlign: "center",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => LogOut({ navigation })}>
-              <Image
-                source={require("../assets/images/logout.png")}
-                style={{
-                  width: 24,
-                  height: 24,
-                  marginRight: 16,
-                }}
-              ></Image>
-            </TouchableOpacity>
-          ),
+          //  title: "Публікації",
+          //  headerTitleAlign: "center",
+          //  headerRight: () => (
+          //    <TouchableOpacity onPress={() => logOut({ navigation })}>
+          //      <Image
+          //        source={require("../assets/images/logout.png")}
+          //        style={{
+          //          width: 24,
+          //          height: 24,
+          //          marginRight: 16,
+          //        }}
+          //      ></Image>
+          //    </TouchableOpacity>
+          //  ),
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
             <Image
@@ -82,15 +57,16 @@ const Home = () => {
             ></Image>
           ),
         }}
-        component={Posts}
+        component={PostsScreen}
       />
       <Tab.Screen
         name="CreatePost"
         options={{
+          headerShown: true,
           title: "Створити публікацію",
           headerTitleAlign: "center",
           headerLeft: () => (
-            <TouchableOpacity onPress={() => LogBack({ navigation })}>
+            <TouchableOpacity onPress={() => logBack({ navigation })}>
               <Image
                 source={require("../assets/images/arrowLeft.png")}
                 style={{
@@ -115,7 +91,7 @@ const Home = () => {
             ></Image>
           ),
         }}
-        component={CreatePost}
+        component={CreatePostsScreen}
       />
       <Tab.Screen
         name="Profile"
@@ -135,7 +111,7 @@ const Home = () => {
             ></Image>
           ),
         }}
-        component={Profile}
+        component={ProfileScreen}
       />
     </Tab.Navigator>
   );

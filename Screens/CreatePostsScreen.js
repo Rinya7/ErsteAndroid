@@ -60,7 +60,7 @@ const CreatePostsScreen = () => {
     }
   }, [postTitles]);
 
-  const LogBack = ({ navigation }) => {
+  const logBack = ({ navigation }) => {
     navigation.goBack();
   };
 
@@ -99,10 +99,9 @@ const CreatePostsScreen = () => {
     }));
   };
 
-  const publickPost = ({ navigation }) => {
+  const publickPost = () => {
     console.log("postTitles:", postTitles);
-    console.log("navigation:", navigation);
-    //roure.navigate("Home");
+    navigation.replace("Home");
     setPostTitles(basePost);
     setPhoto("");
   };
@@ -179,7 +178,7 @@ const CreatePostsScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.deletePost}
-            onPress={() => LogBack({ navigation })}
+            onPress={() => logBack({ navigation })}
           >
             <Image source={require("../assets/images/trash.png")}></Image>
           </TouchableOpacity>
