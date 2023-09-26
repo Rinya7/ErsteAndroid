@@ -9,13 +9,14 @@ import {
 
 import { useNavigation } from "@react-navigation/native";
 
-const LogOut = ({ navigation }) => {
-  navigation.navigate("LoginScreen");
-  console.log("Hello");
-};
-
 const ProfileScreen = () => {
   const navigation = useNavigation();
+
+  const logOut = () => {
+    navigation.navigate("LoginScreen");
+    console.log("Hello");
+  };
+
   return (
     <View
       style={styles.container}
@@ -27,7 +28,7 @@ const ProfileScreen = () => {
         style={styles.image}
       >
         <View style={styles.card}>
-          <TouchableOpacity onPress={() => LogOut({ navigation })}>
+          <TouchableOpacity onPress={logOut}>
             <Image
               source={require("../assets/images/logout.png")}
               style={styles.logOut}

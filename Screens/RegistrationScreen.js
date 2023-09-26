@@ -25,7 +25,7 @@ const RegistrationScreen = () => {
   const signIn = () => {
     navigation.navigate("Home");
     console.log(logState);
-    setLogState(logState);
+    setLogState(baseLogState);
   };
 
   return (
