@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -20,7 +21,7 @@ const ProfileScreen = () => {
   return (
     <View
       style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ImageBackground
         source={require("../assets/images/bg.jpg")}

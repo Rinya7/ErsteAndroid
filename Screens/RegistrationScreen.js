@@ -10,22 +10,30 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSingUpUser } from "../redux/auth/authOperations";
 
-const baseLogState = {
+const baseState = {
   name: "",
   email: "",
   password: "",
+  photo: "",
 };
 
 const RegistrationScreen = () => {
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
-  const [logState, setLogState] = useState(baseLogState);
+  const [state, setState] = useState(baseState);
+
   const signIn = () => {
-    navigation.navigate("Home");
-    console.log(logState);
-    setLogState(baseLogState);
+    console.log("state:", state);
+    dispatch(authSingUpUser(state));
+    setState(baseState);
+    //navigation.navigate("Home");
   };
 
   return (
@@ -70,9 +78,9 @@ const RegistrationScreen = () => {
                 textContentType={"name"}
                 autoComplete={"name"}
                 textAlign={"left"}
-                value={logState.name}
+                value={state.name}
                 onChangeText={(value) =>
-                  setLogState((prevState) => ({ ...prevState, name: value }))
+                  setState((prevState) => ({ ...prevState, name: value }))
                 }
               />
               <TextInput
@@ -81,9 +89,9 @@ const RegistrationScreen = () => {
                 textContentType={"emailAddress"}
                 autoComplete={"email"}
                 textAlign={"left"}
-                value={logState.email}
+                value={state.email}
                 onChangeText={(value) =>
-                  setLogState((prevState) => ({ ...prevState, email: value }))
+                  setState((prevState) => ({ ...prevState, email: value }))
                 }
               />
               <TextInput
@@ -93,9 +101,9 @@ const RegistrationScreen = () => {
                 autoComplete="password"
                 textAlign={"left"}
                 secureTextEntry={true}
-                value={logState.password}
+                value={state.password}
                 onChangeText={(value) =>
-                  setLogState((prevState) => ({
+                  setState((prevState) => ({
                     ...prevState,
                     password: value,
                   }))

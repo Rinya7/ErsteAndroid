@@ -16,6 +16,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 
 import { Dimensions } from "react-native";
@@ -100,7 +101,6 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const publickPost = () => {
-    //console.log("postTitles:", postTitles);
     navigation.navigate("DefaultScreen", postTitles);
     setPostTitles(basePost);
     setDisableBtn(true);
