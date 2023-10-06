@@ -8,20 +8,25 @@ import {
   Platform,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+//import { useNavigation } from "@react-navigation/native";
+//import auth from "../firebase/config";
+import { authSingOutUser } from "../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
 
 const ProfileScreen = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  //  const navigation = useNavigation();
 
   const logOut = () => {
-    navigation.navigate("LoginScreen");
-    console.log("Hello");
+    dispatch(authSingOutUser());
+    //navigation.navigate("LoginScreen");
+    //console.log("Hello");
   };
 
   return (
     <View
       style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ImageBackground
         source={require("../assets/images/bg.jpg")}

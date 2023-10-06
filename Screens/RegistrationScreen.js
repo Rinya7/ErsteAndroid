@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import { authSingUpUser } from "../redux/auth/authOperations";
 
 const baseState = {
-  name: "",
+  login: "",
   email: "",
   password: "",
   photo: "",
@@ -30,7 +30,7 @@ const RegistrationScreen = () => {
   const [state, setState] = useState(baseState);
 
   const signIn = () => {
-    console.log("state:", state);
+    console.log("Registertate:", state);
     dispatch(authSingUpUser(state));
     setState(baseState);
     //navigation.navigate("Home");
@@ -78,9 +78,9 @@ const RegistrationScreen = () => {
                 textContentType={"name"}
                 autoComplete={"name"}
                 textAlign={"left"}
-                value={state.name}
+                value={state.login}
                 onChangeText={(value) =>
-                  setState((prevState) => ({ ...prevState, name: value }))
+                  setState((prevState) => ({ ...prevState, login: value }))
                 }
               />
               <TextInput

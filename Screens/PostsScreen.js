@@ -3,16 +3,20 @@ import DefaultPostsScreen from "./nestedPostsScreens/DefaultPostsScreen";
 import CommentsScreen from "./nestedPostsScreens/CommentsScreen";
 import MapScreen from "./nestedPostsScreens/MapScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
+//import { useNavigation } from "@react-navigation/native";
+import { authSingOutUser } from "../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
 
 const NestedScreen = createNativeStackNavigator();
 
 const PostsScreen = ({ route }) => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  //  const navigation = useNavigation();
 
   const logOut = () => {
-    navigation.navigate("LoginScreen");
-    console.log("Hello");
+    dispatch(authSingOutUser());
+    //navigation.navigate("LoginScreen");
+    //console.log("Hello");
   };
   return (
     <NestedScreen.Navigator>
