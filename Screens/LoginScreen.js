@@ -29,7 +29,6 @@ const LoginScreen = () => {
   const signIn = () => {
     dispatch(authSingInUser(state));
     setState(initialState);
-    //navigation.navigate("Home");
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

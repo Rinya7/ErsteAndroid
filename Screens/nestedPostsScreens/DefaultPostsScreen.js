@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 const DefaultPostsScreen = ({ route, navigation }) => {
-  console.log("route.params.posts:", route.params);
+  //  console.log("route.params.posts:", route.params);
   const gps = route.params ? route.params.gps || null : null;
 
   const [posts, setPostst] = useState([]);
@@ -19,7 +19,7 @@ const DefaultPostsScreen = ({ route, navigation }) => {
       setPostst((prevState) => [...prevState, route.params]);
     }
   }, [route.params]);
-  console.log("posts:", posts);
+  //  console.log("posts:", posts);
 
   return (
     <View
@@ -46,7 +46,7 @@ const DefaultPostsScreen = ({ route, navigation }) => {
                 style={styles.fotoPost}
               ></Image>
               <View>
-                <Text style={styles.postTitle}>${item.namePlace}</Text>
+                <Text style={styles.postTitle}>{item.namePlace}</Text>
                 <View style={styles.postDescription}>
                   <View style={styles.postComment}>
                     <TouchableOpacity
@@ -79,7 +79,7 @@ const DefaultPostsScreen = ({ route, navigation }) => {
                       source={require("../../assets/images/map-pin.png")}
                     ></Image>
                   </TouchableOpacity>
-                  <Text style={styles.country}>${item.nameLocation}</Text>
+                  <Text style={styles.country}>{item.nameLocation}</Text>
                 </View>
               </View>
             </View>

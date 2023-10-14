@@ -30,10 +30,8 @@ const RegistrationScreen = () => {
   const [state, setState] = useState(baseState);
 
   const signIn = () => {
-    console.log("Registertate:", state);
     dispatch(authSingUpUser(state));
     setState(baseState);
-    //navigation.navigate("Home");
   };
 
   return (

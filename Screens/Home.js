@@ -6,14 +6,8 @@ import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import { useNavigation } from "@react-navigation/native";
 
-//const logOut = ({ navigation }) => {
-//  navigation.navigate("LoginScreen");
-//  console.log("Hello");
-//};
-
 const logBack = ({ navigation }) => {
   navigation.goBack();
-  console.log("Hello");
 };
 
 const Tab = createBottomTabNavigator();

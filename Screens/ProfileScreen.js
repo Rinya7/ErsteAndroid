@@ -8,19 +8,14 @@ import {
   Platform,
 } from "react-native";
 
-//import { useNavigation } from "@react-navigation/native";
-//import auth from "../firebase/config";
 import { authSingOutUser } from "../redux/auth/authOperations";
 import { useDispatch } from "react-redux";
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
-  //  const navigation = useNavigation();
 
   const logOut = () => {
     dispatch(authSingOutUser());
-    //navigation.navigate("LoginScreen");
-    //console.log("Hello");
   };
 
   return (

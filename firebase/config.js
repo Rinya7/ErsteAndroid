@@ -1,24 +1,27 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+//import { getAuth } from "firebase/auth";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+//import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDzV8y73_u2RY8n21GqNl_fJbKX3y3vc8U",
-  authDomain: "ersteandroid-33667.firebaseapp.com",
-  databaseURL:
-    "https://ersteandroid-33667-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "ersteandroid-33667",
-  storageBucket: "ersteandroid-33667.appspot.com",
-  messagingSenderId: "256325972019",
-  appId: "1:256325972019:web:05854723cc0fa5008ef346",
-  measurementId: "G-K2Y85X67DW",
+  apiKey: "AIzaSyA90VG8f0aEBtJeqigrfkkTj2Mhh_aVOJU",
+  authDomain: "myandroidapp-f5bd1.firebaseapp.com",
+  projectId: "myandroidapp-f5bd1",
+  storageBucket: "myandroidapp-f5bd1.appspot.com",
+  messagingSenderId: "318334086086",
+  appId: "1:318334086086:web:e691c7f0e8d3af71fba0c7",
+  measurementId: "G-6QHWJZNT1H",
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+
+//export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 export default auth;
