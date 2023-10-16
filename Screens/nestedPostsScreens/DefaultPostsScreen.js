@@ -9,16 +9,32 @@ import {
   Platform,
 } from "react-native";
 
-const DefaultPostsScreen = ({ route, navigation }) => {
-  //  console.log("route.params.posts:", route.params);
-  const gps = route.params ? route.params.gps || null : null;
+import { onSnapshot, collection } from "firebase/firestore";
+import { db } from "../../firebase/config";
 
+const DefaultPostsScreen = ({ navigation }) => {
   const [posts, setPostst] = useState([]);
-  useEffect(() => {
-    if (route.params) {
-      setPostst((prevState) => [...prevState, route.params]);
+  //  const gps = route.params ? route.params.gps || null : null;
+  //  const { gps } = posts;
+
+  console.log("posts", posts);
+
+  const allPostByUser = async () => {
+    try {
+      await onSnapshot(collection(db, "posts"), (data) =>
+        setPostst(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+    } catch (error) {
+      console.error("Error download colection:", error);
     }
-  }, [route.params]);
+  };
+
+  useEffect(() => {
+    //if (route.params) {
+    //  setPostst((prevState) => [...prevState, route.params]);
+    //}
+    allPostByUser();
+  }, []);
   //  console.log("posts:", posts);
 
   return (
@@ -69,11 +85,7 @@ const DefaultPostsScreen = ({ route, navigation }) => {
                     <Text style={styles.likes}>0</Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("Map", {
-                        gps,
-                      })
-                    }
+                    onPress={() => navigation.navigate("Map", item.gps)}
                   >
                     <Image
                       source={require("../../assets/images/map-pin.png")}

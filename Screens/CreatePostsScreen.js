@@ -24,7 +24,9 @@ import {
 import { Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 
-import uploadPhotoToServer from "../firebase/utilites/uploadPhotoOnServer";
+import uploadPhotoToServer from "../firebase/utilites/uploadPhotoToServer";
+import uploadPostToServer from "../firebase/utilites/uploadPostToServer";
+import { useSelector } from "react-redux";
 
 //Шаблон публикации
 const basePost = {
@@ -32,6 +34,8 @@ const basePost = {
   nameLocation: "",
   gps: { latitude: "", longitude: "" },
   photo: "",
+  nickName: "",
+  userId: "",
 };
 
 const CreatePostsScreen = ({ navigation }) => {
@@ -41,6 +45,8 @@ const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [postTitles, setPostTitles] = useState(basePost);
   const [disableBtn, setDisableBtn] = useState(true);
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -57,6 +63,8 @@ const CreatePostsScreen = ({ navigation }) => {
           latitude: `${location.coords.latitude}`,
           longitude: `${location.coords.longitude}`,
         },
+        nickName: login,
+        userId: userId,
       }));
     })();
 
@@ -99,12 +107,9 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const publickPost = async () => {
     const fileId = nanoid();
-    const uploadFotoFromServer = await uploadPhotoToServer(
-      postTitles.photo,
-      fileId
-    );
-    console.log("uploadFotoFromServer:", uploadFotoFromServer);
-    navigation.navigate("DefaultScreen", postTitles);
+    await uploadPhotoToServer(postTitles.photo, fileId);
+    await uploadPostToServer(postTitles);
+    navigation.navigate("DefaultScreen");
     setPostTitles(basePost);
     setDisableBtn(true);
   };
