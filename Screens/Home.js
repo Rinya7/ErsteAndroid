@@ -25,6 +25,7 @@ const Home = () => {
         name="Posts"
         options={{
           tabBarShowLabel: false,
+
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/images/grid.png")}

@@ -5,26 +5,36 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
 
 function CommentsScreen() {
   const [comment, setComment] = useState("");
   return (
-    <View style={styles.container}>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder={"Адреса електронної пошти"}
-          textContentType={"emailAddress"}
-          autoComplete={"email"}
-          textAlign={"left"}
-          value={comment}
-          onChangeText={(value) =>
-            setComment((prevState) => ({ ...prevState, comment: value }))
-          }
-        />
-      </View>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <View style={styles.container}>
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder={"Коментувати..."}
+              textContentType={"emailAddress"}
+              autoComplete={"email"}
+              textAlign={"left"}
+              value={comment}
+              onChangeText={(value) =>
+                setComment((prevState) => ({ ...prevState, comment: value }))
+              }
+            />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -32,13 +42,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "rgba(255, 255, 255, 1)",
-    justifyContent: "center",
+    justifyContent: "flex-end",
   },
   form: {
     paddingHorizontal: 16,
     maxHeight: 50,
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
   },
   input: {
     borderWidth: 1,
@@ -48,6 +56,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     height: 50,
     fontFamily: "Roboto-Regular",
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
 });
 

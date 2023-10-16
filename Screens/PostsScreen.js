@@ -40,12 +40,16 @@ const PostsScreen = ({ route }) => {
         name="Comments"
         options={{
           title: "Comments",
+          tabBarStyle: { display: "none" },
         }}
         component={CommentsScreen}
       ></NestedScreen.Screen>
       <NestedScreen.Screen
         name="Map"
-        options={{ title: "Map" }}
+        options={{
+          title: "Map",
+          tabBarStyle: { display: "none" },
+        }}
         component={MapScreen}
       ></NestedScreen.Screen>
     </NestedScreen.Navigator>
