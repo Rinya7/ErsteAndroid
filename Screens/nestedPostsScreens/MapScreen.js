@@ -2,10 +2,9 @@ import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 const MapScreen = ({ route }) => {
-  console.log("route.params:", route.params);
   const { longitude, latitude } = route.params;
-  const latitudeX = parseFloat(route.params ? latitude || null : null);
-  const longitudeY = parseFloat(route.params ? longitude || null : null);
+  const latitudeX = route.params ? latitude || null : null;
+  const longitudeY = route.params ? longitude || null : null;
 
   return (
     <View style={styles.container}>

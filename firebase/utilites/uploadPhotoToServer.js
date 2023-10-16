@@ -9,9 +9,7 @@ const uploadPhotoToServer = async (photoUrl, fileId) => {
   try {
     await uploadBytes(storageRef, file);
     console.log("File uploaded successfully!");
-    return (uploadFotoFromServer = await getDownloadURL(
-      ref(storage, `postImages/${fileId}`)
-    ));
+    return await getDownloadURL(ref(storage, `postImages/${fileId}`));
   } catch (error) {
     console.error("Error uploading file:", error);
   }

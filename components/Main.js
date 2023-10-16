@@ -11,6 +11,8 @@ import {
   authSingOutUser,
   authStateChangeUser,
 } from "../redux/auth/authOperations";
+import CommentsScreen from "../screens/nestedPostsScreens/CommentsScreen";
+import MapScreen from "../screens/nestedPostsScreens/MapScreen";
 
 const MainStack = createStackNavigator(); // вказує на групу навігаторів
 
@@ -18,7 +20,6 @@ const Main = () => {
   const dispatch = useDispatch();
 
   const { stateChange } = useSelector((state) => state.auth);
-  console.log("stateChange:", stateChange);
 
   useEffect(() => {
     dispatch(authStateChangeUser());
@@ -35,10 +36,16 @@ const Main = () => {
               options={{ headerShown: false }}
               component={Home}
             />
-            {/*<MainStack.Screen
-          name="CreatePostsScreen"
-          component={CreatePostsScreen}
-        />*/}
+            <MainStack.Screen
+              name="Comments"
+              options={{
+                title: "Comments",
+                tabBarStyle: { display: "none" },
+              }}
+              component={CommentsScreen}
+            />
+
+            <MainStack.Screen name="Map" component={MapScreen} />
           </MainStack.Group>
         ) : (
           <MainStack.Group>

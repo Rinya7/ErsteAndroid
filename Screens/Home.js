@@ -2,17 +2,24 @@ import * as React from "react";
 import { Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./ProfileScreen";
-import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import { useNavigation } from "@react-navigation/native";
-
-const logBack = ({ navigation }) => {
-  navigation.goBack();
-};
+import DefaultPostsScreen from "./nestedPostsScreens/DefaultPostsScreen";
+import { authSingOutUser } from "../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  const logBack = ({ navigation }) => {
+    navigation.goBack();
+  };
+
+  const logOut = () => {
+    dispatch(authSingOutUser());
+  };
   const navigation = useNavigation();
   return (
     <Tab.Navigator
@@ -22,8 +29,23 @@ const Home = () => {
       }}
     >
       <Tab.Screen
-        name="Posts"
+        name="DefaultScreen"
         options={{
+          headerShown: true,
+          title: "Публікації",
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <TouchableOpacity onPress={logOut}>
+              <Image
+                source={require("../assets/images/logout.png")}
+                style={{
+                  width: 24,
+                  height: 24,
+                  marginRight: 16,
+                }}
+              ></Image>
+            </TouchableOpacity>
+          ),
           tabBarShowLabel: false,
 
           tabBarIcon: ({ focused }) => (
@@ -38,8 +60,10 @@ const Home = () => {
             ></Image>
           ),
         }}
-        component={PostsScreen}
+        //component={PostsScreen}
+        component={DefaultPostsScreen}
       />
+
       <Tab.Screen
         name="CreatePost"
         options={{

@@ -23,7 +23,6 @@ import {
 
 import { Dimensions } from "react-native";
 import { useEffect, useState } from "react";
-
 import uploadPhotoToServer from "../firebase/utilites/uploadPhotoToServer";
 import uploadPostToServer from "../firebase/utilites/uploadPostToServer";
 import { useSelector } from "react-redux";
@@ -39,14 +38,13 @@ const basePost = {
 };
 
 const CreatePostsScreen = ({ navigation }) => {
-  //  const isFocused = useIsFocused();
+  //const isFocused = useIsFocused();
 
   const [permissionCam, requestPermissionCam] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [postTitles, setPostTitles] = useState(basePost);
   const [disableBtn, setDisableBtn] = useState(true);
-
-  const { userId, login } = useSelector((state) => state.auth);
+  const { userId, nickName } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -55,23 +53,26 @@ const CreatePostsScreen = ({ navigation }) => {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-      const location = await Location.getCurrentPositionAsync();
+
+      const location = await Location.getCurrentPositionAsync({});
 
       setPostTitles((prevState) => ({
         ...prevState,
         gps: {
-          latitude: `${location.coords.latitude}`,
-          longitude: `${location.coords.longitude}`,
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
         },
-        nickName: login,
-        userId: userId,
       }));
     })();
+  }, []);
 
+  useEffect(() => {
     setDisableBtn(
-      postTitles.namePlace.length == 0 ||
-        postTitles.nameLocation.length == 0 ||
-        postTitles.photo.length == 0
+      !(
+        postTitles.namePlace.length > 0 &&
+        postTitles.nameLocation.length > 0 &&
+        postTitles.photo.length > 0
+      )
     );
   }, [postTitles]);
 
@@ -98,18 +99,36 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const { uri } = await camera.takePictureAsync();
-
+    //console.log("uri:", uri);
     setPostTitles((prevState) => ({
       ...prevState,
       photo: uri,
+      nickName: nickName,
+      userId: userId,
     }));
   };
 
   const publickPost = async () => {
     const fileId = nanoid();
-    await uploadPhotoToServer(postTitles.photo, fileId);
+
+    const uploadFotoFromServer = await uploadPhotoToServer(
+      postTitles.photo,
+      fileId
+    );
+
+    //console.log("uploadFotoFromServer:", uploadFotoFromServer);
+
+    setPostTitles((prevState) => ({
+      ...prevState,
+      photo: uploadFotoFromServer,
+    }));
+
+    //console.log("postTitles.photo:", postTitles.photo);
+
     await uploadPostToServer(postTitles);
+
     navigation.navigate("DefaultScreen");
+
     setPostTitles(basePost);
     setDisableBtn(true);
   };

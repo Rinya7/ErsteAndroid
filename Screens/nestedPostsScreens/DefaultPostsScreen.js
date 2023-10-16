@@ -13,16 +13,12 @@ import { onSnapshot, collection } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 const DefaultPostsScreen = ({ navigation }) => {
-  const [posts, setPostst] = useState([]);
-  //  const gps = route.params ? route.params.gps || null : null;
-  //  const { gps } = posts;
-
-  console.log("posts", posts);
+  const [posts, setPosts] = useState([]);
 
   const allPostByUser = async () => {
     try {
       await onSnapshot(collection(db, "posts"), (data) =>
-        setPostst(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
       );
     } catch (error) {
       console.error("Error download colection:", error);
@@ -30,12 +26,8 @@ const DefaultPostsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    //if (route.params) {
-    //  setPostst((prevState) => [...prevState, route.params]);
-    //}
     allPostByUser();
   }, []);
-  //  console.log("posts:", posts);
 
   return (
     <View
@@ -52,53 +44,57 @@ const DefaultPostsScreen = ({ navigation }) => {
           <Text style={styles.emailUser}>email@example.com</Text>
         </View>
       </View>
-      <FlatList
-        data={posts}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <View style={styles.post}>
-              <Image
-                source={{ uri: item.photo }}
-                style={styles.fotoPost}
-              ></Image>
-              <View>
-                <Text style={styles.postTitle}>{item.namePlace}</Text>
-                <View style={styles.postDescription}>
-                  <View style={styles.postComment}>
+      {posts.length > 0 ? (
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <View style={styles.post}>
+                <Image
+                  source={{ uri: item.photo }}
+                  style={styles.fotoPost}
+                ></Image>
+                <View>
+                  <Text style={styles.postTitle}>{item.namePlace}</Text>
+                  <View style={styles.postDescription}>
+                    <View style={styles.postComment}>
+                      <TouchableOpacity
+                        style={styles.feedback}
+                        onPress={() => navigation.navigate("Comments", item.id)}
+                      >
+                        <Image
+                          source={require("../../assets/images/message.png")}
+                        ></Image>
+                      </TouchableOpacity>
+                      <Text style={styles.reviews}>0</Text>
+                      <TouchableOpacity
+                        style={styles.feedback}
+                        onPress={() => navigation.navigate("ProfileScreen")}
+                      >
+                        <Image
+                          source={require("../../assets/images/thumbs-up.png")}
+                        ></Image>
+                      </TouchableOpacity>
+                      <Text style={styles.likes}>0</Text>
+                    </View>
                     <TouchableOpacity
-                      style={styles.feedback}
-                      onPress={() => navigation.navigate("Comments")}
+                      onPress={() => navigation.navigate("Map", item.gps)}
                     >
                       <Image
-                        source={require("../../assets/images/message.png")}
+                        source={require("../../assets/images/map-pin.png")}
                       ></Image>
                     </TouchableOpacity>
-                    <Text style={styles.reviews}>0</Text>
-                    <TouchableOpacity
-                      style={styles.feedback}
-                      onPress={() => navigation.navigate("ProfileScreen")}
-                    >
-                      <Image
-                        source={require("../../assets/images/thumbs-up.png")}
-                      ></Image>
-                    </TouchableOpacity>
-                    <Text style={styles.likes}>0</Text>
+                    <Text style={styles.country}>{item.nameLocation}</Text>
                   </View>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Map", item.gps)}
-                  >
-                    <Image
-                      source={require("../../assets/images/map-pin.png")}
-                    ></Image>
-                  </TouchableOpacity>
-                  <Text style={styles.country}>{item.nameLocation}</Text>
                 </View>
               </View>
             </View>
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      ) : (
+        <Text style={styles.textNoPosts}>No Posts</Text>
+      )}
     </View>
   );
 };
@@ -195,6 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Roboto-Regular",
   },
+  textNoPosts: { textAlign: "center" },
 });
 
 export default DefaultPostsScreen;
