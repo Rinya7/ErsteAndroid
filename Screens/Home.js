@@ -6,11 +6,13 @@ import CreatePostsScreen from "./CreatePostsScreen";
 import { useNavigation } from "@react-navigation/native";
 import DefaultPostsScreen from "./nestedPostsScreens/DefaultPostsScreen";
 import { authSingOutUser } from "../redux/auth/authOperations";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
+  //  const { userId, nickName, avatar } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const logBack = ({ navigation }) => {

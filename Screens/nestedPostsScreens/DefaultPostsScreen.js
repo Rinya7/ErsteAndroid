@@ -9,11 +9,12 @@ import {
   Platform,
 } from "react-native";
 
-//import { onSnapshot, collection } from "firebase/firestore";
-//import { db } from "../../firebase/config";
 import allPostByUser from "../../firebase/utilites/uploadAllPosts";
+import { useSelector } from "react-redux";
 
 const DefaultPostsScreen = ({ navigation }) => {
+  const { nickName, avatar, email } = useSelector((state) => state.auth);
+
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -26,13 +27,18 @@ const DefaultPostsScreen = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.user}>
-        <Image
-          source={require("../../assets/images/default.jpg")}
-          style={styles.fotoUser}
-        ></Image>
+        {avatar ? (
+          <Image source={{ uri: avatar }} style={styles.fotoUser}></Image>
+        ) : (
+          <Image
+            source={require("../../assets/images/avatarDefault.png")}
+            style={styles.fotoUser}
+          ></Image>
+        )}
+
         <View style={styles.infoUser}>
-          <Text style={styles.nameUser}>Natali Romanova</Text>
-          <Text style={styles.emailUser}>email@example.com</Text>
+          <Text style={styles.nameUser}>{nickName}</Text>
+          <Text style={styles.emailUser}>{email}</Text>
         </View>
       </View>
       {posts.length > 0 ? (
@@ -104,6 +110,7 @@ const styles = StyleSheet.create({
   fotoUser: {
     height: 60,
     width: 60,
+    borderRadius: 16,
     marginRight: 8,
   },
   infoUser: {

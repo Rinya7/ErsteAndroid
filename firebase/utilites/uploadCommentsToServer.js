@@ -5,7 +5,8 @@ const uploadCommentsToServer = async (
   postId,
   comment,
   nickName,
-  dateWriteComment
+  dateWriteComment,
+  avatar
 ) => {
   try {
     const postRef = doc(db, "posts", postId);
@@ -14,6 +15,7 @@ const uploadCommentsToServer = async (
       comment,
       nickName,
       dateWriteComment,
+      avatar,
     });
     console.log("Comment added successfully!");
   } catch (error) {

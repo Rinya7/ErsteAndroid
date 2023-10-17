@@ -15,12 +15,15 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { authSingUpUser } from "../redux/auth/authOperations";
+import { pickImage, takePhoto } from "../utilites/pickImage";
+import { nanoid } from "nanoid";
+import uploadAvatarToServer from "../firebase/utilites/uploadAvatarToServer";
 
 const baseState = {
   nickName: "",
   email: "",
   password: "",
-  photo: "",
+  avatar: "../assets/images/avatarDefault.png",
 };
 
 const RegistrationScreen = () => {
@@ -29,9 +32,28 @@ const RegistrationScreen = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(baseState);
 
-  const signIn = () => {
-    dispatch(authSingUpUser(state));
-    setState(baseState);
+  const addAvatar = async () => {
+    const aserAvatar = await takePhoto();
+    setState((prevState) => ({ ...prevState, avatar: aserAvatar }));
+  };
+
+  const signIn = async () => {
+    try {
+      const fileAvatarId = nanoid();
+      const uploadAvatarFromServer = await uploadAvatarToServer(
+        state.avatar,
+        fileAvatarId
+      );
+
+      setState((prevState) => ({
+        ...prevState,
+        avatar: uploadAvatarFromServer,
+      }));
+      dispatch(authSingUpUser(state));
+      setState(baseState);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -47,23 +69,19 @@ const RegistrationScreen = () => {
         >
           <View style={styles.form}>
             <View style={[styles.divAva]}>
-              <Image
-                source={require("../assets/images/default.jpg")}
-                style={[
-                  styles.avatar,
-                  {
-                    transform: [{ translateY: -50 }],
-                  },
-                ]}
-              ></Image>
-              <TouchableOpacity
-                style={[
-                  styles.add,
-                  {
-                    transform: [{ translateX: 60 }, { translateY: 30 }],
-                  },
-                ]}
-              >
+              {state.avatar.length > 0 ? (
+                <Image
+                  source={{ uri: state.avatar }}
+                  style={styles.avatar}
+                ></Image>
+              ) : (
+                <Image
+                  source={require("../assets/images/default.jpg")}
+                  style={styles.avatar}
+                ></Image>
+              )}
+
+              <TouchableOpacity style={styles.add} onPress={addAvatar}>
                 <Image source={require("../assets/images/add.png")}></Image>
               </TouchableOpacity>
             </View>
@@ -147,9 +165,11 @@ const styles = StyleSheet.create({
   avatar: {
     borderRadius: 16,
     position: "absolute",
+    transform: [{ translateY: -50 }],
   },
   add: {
     position: "absolute",
+    transform: [{ translateX: 60 }, { translateY: 30 }],
   },
   textTitle: {
     color: "rgba(33, 33, 33, 1)",

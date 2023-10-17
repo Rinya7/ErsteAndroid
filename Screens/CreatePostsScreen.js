@@ -35,6 +35,7 @@ const basePost = {
   photo: "",
   nickName: "",
   userId: "",
+  avatar: "",
 };
 
 const CreatePostsScreen = ({ navigation }) => {
@@ -44,7 +45,7 @@ const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [postTitles, setPostTitles] = useState(basePost);
   const [disableBtn, setDisableBtn] = useState(true);
-  const { userId, nickName } = useSelector((state) => state.auth);
+  const { userId, nickName, avatar } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -105,6 +106,7 @@ const CreatePostsScreen = ({ navigation }) => {
       photo: uri,
       nickName: nickName,
       userId: userId,
+      avatar: avatar,
     }));
   };
 
@@ -116,14 +118,10 @@ const CreatePostsScreen = ({ navigation }) => {
       fileId
     );
 
-    //console.log("uploadFotoFromServer:", uploadFotoFromServer);
-
     setPostTitles((prevState) => ({
       ...prevState,
       photo: uploadFotoFromServer,
     }));
-
-    //console.log("postTitles.photo:", postTitles.photo);
 
     await uploadPostToServer(postTitles);
 

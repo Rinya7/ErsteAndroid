@@ -22,7 +22,7 @@ import { db } from "../../firebase/config";
 import { getFormattedDate } from "../../helpers/dateUtils";
 
 const CommentsScreen = ({ route, navigation }) => {
-  const { nickName } = useSelector((state) => state.auth);
+  const { avatar, nickName } = useSelector((state) => state.auth);
   const { postId, photo } = route.params;
   const [comment, setComment] = useState("");
   const [allComment, setAllComment] = useState([]);
@@ -33,7 +33,14 @@ const CommentsScreen = ({ route, navigation }) => {
 
   const sendComment = async () => {
     const dateWriteComment = getFormattedDate();
-    await uploadCommentsToServer(postId, comment, nickName, dateWriteComment);
+    await uploadCommentsToServer(
+      postId,
+      comment,
+      nickName,
+
+      dateWriteComment,
+      avatar
+    );
     //navigation.navigate("DefaultScreen");
     setComment("");
   };
@@ -43,7 +50,7 @@ const CommentsScreen = ({ route, navigation }) => {
       const postRef = doc(db, "posts", postId);
       const commentsCollection = collection(postRef, "comments");
       await onSnapshot(commentsCollection, (data) =>
-        setAllComment(data.docs.map((doc) => ({ ...doc.data() })))
+        setAllComment(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
       );
     } catch (error) {
       console.error("Error download colection:", error);
@@ -62,12 +69,23 @@ const CommentsScreen = ({ route, navigation }) => {
             data={allComment}
             renderItem={({ item }) => (
               <View style={styles.item}>
+                {item.avatar ? (
+                  <Image
+                    source={{ uri: item.avatar }}
+                    style={styles.fotoUser}
+                  ></Image>
+                ) : (
+                  <Image
+                    source={require("../../assets/images/avatarDefault.png")}
+                    style={styles.fotoUser}
+                  ></Image>
+                )}
                 <Text>{item.nickName}</Text>
                 <Text style={styles.title}>{item.comment}</Text>
                 <Text>{item.dateWriteComment}</Text>
               </View>
             )}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item.id}
           />
         </SafeAreaView>
         <View style={styles.form}>
@@ -95,6 +113,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 1)",
     justifyContent: "flex-end",
     paddingHorizontal: 16,
+  },
+  fotoUser: {
+    height: 60,
+    width: 60,
+    borderRadius: 16,
+    marginRight: 8,
   },
   fotoPost: {
     height: 240,
