@@ -8,27 +8,68 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Image,
+  StatusBar,
+  FlatList,
+  Text,
+  SafeAreaView,
 } from "react-native";
 
 import { useSelector } from "react-redux";
 import uploadCommentsToServer from "../../firebase/utilites/uploadCommentsToServer";
+import { collection, doc, onSnapshot } from "firebase/firestore";
+import { useEffect } from "react";
+import { db } from "../../firebase/config";
+import { getFormattedDate } from "../../helpers/dateUtils";
 
 const CommentsScreen = ({ route, navigation }) => {
   const { nickName } = useSelector((state) => state.auth);
-  const postId = route.params;
+  const { postId, photo } = route.params;
   const [comment, setComment] = useState("");
+  const [allComment, setAllComment] = useState([]);
+
+  useEffect(() => {
+    allCommentsFromServer();
+  }, []);
 
   const sendComment = async () => {
-    await uploadCommentsToServer(postId, comment, nickName);
-
-    navigation.navigate("DefaultScreen");
+    const dateWriteComment = getFormattedDate();
+    await uploadCommentsToServer(postId, comment, nickName, dateWriteComment);
+    //navigation.navigate("DefaultScreen");
+    setComment("");
   };
+
+  const allCommentsFromServer = async () => {
+    try {
+      const postRef = doc(db, "posts", postId);
+      const commentsCollection = collection(postRef, "comments");
+      await onSnapshot(commentsCollection, (data) =>
+        setAllComment(data.docs.map((doc) => ({ ...doc.data() })))
+      );
+    } catch (error) {
+      console.error("Error download colection:", error);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
+        <Image source={{ uri: photo }} style={styles.fotoPost}></Image>
+        <SafeAreaView style={styles.containerComments}>
+          <FlatList
+            data={allComment}
+            renderItem={({ item }) => (
+              <View style={styles.item}>
+                <Text>{item.nickName}</Text>
+                <Text style={styles.title}>{item.comment}</Text>
+                <Text>{item.dateWriteComment}</Text>
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </SafeAreaView>
         <View style={styles.form}>
           <TextInput
             style={styles.input}
@@ -53,7 +94,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(255, 255, 255, 1)",
     justifyContent: "flex-end",
-    paddingBottom: 16,
+    paddingHorizontal: 16,
+  },
+  fotoPost: {
+    height: 240,
+    borderRadius: 8,
+  },
+  containerComments: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  item: {
+    backgroundColor: "#f9c2ff",
+    marginVertical: 24,
+    backgroundColor: "rgba(0, 0, 0, 0.03)",
+    borderRadius: 6,
+  },
+  title: {
+    fontSize: 32,
   },
   form: {
     paddingHorizontal: 16,

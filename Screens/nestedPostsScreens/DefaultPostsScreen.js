@@ -9,24 +9,15 @@ import {
   Platform,
 } from "react-native";
 
-import { onSnapshot, collection } from "firebase/firestore";
-import { db } from "../../firebase/config";
+//import { onSnapshot, collection } from "firebase/firestore";
+//import { db } from "../../firebase/config";
+import allPostByUser from "../../firebase/utilites/uploadAllPosts";
 
 const DefaultPostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
-  const allPostByUser = async () => {
-    try {
-      await onSnapshot(collection(db, "posts"), (data) =>
-        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-      );
-    } catch (error) {
-      console.error("Error download colection:", error);
-    }
-  };
-
   useEffect(() => {
-    allPostByUser();
+    allPostByUser(setPosts);
   }, []);
 
   return (
@@ -60,7 +51,7 @@ const DefaultPostsScreen = ({ navigation }) => {
                     <View style={styles.postComment}>
                       <TouchableOpacity
                         style={styles.feedback}
-                        onPress={() => navigation.navigate("Comments", item.id)}
+                        onPress={() => navigation.navigate("Comments", item)}
                       >
                         <Image
                           source={require("../../assets/images/message.png")}
