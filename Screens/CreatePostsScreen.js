@@ -3,6 +3,8 @@ import {
   //CameraType
 } from "expo-camera";
 import * as Location from "expo-location";
+import "react-native-get-random-values";
+import { nanoid } from "nanoid";
 //import { useIsFocused } from "@react-navigation/native";
 
 import {
@@ -16,10 +18,14 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 
 import { Dimensions } from "react-native";
 import { useEffect, useState } from "react";
+import uploadPhotoToServer from "../firebase/utilites/uploadPhotoToServer";
+import uploadPostToServer from "../firebase/utilites/uploadPostToServer";
+import { useSelector } from "react-redux";
 
 //Шаблон публикации
 const basePost = {
@@ -27,15 +33,20 @@ const basePost = {
   nameLocation: "",
   gps: { latitude: "", longitude: "" },
   photo: "",
+  nickName: "",
+  userId: "",
+  avatar: "",
+  likes: null,
 };
 
 const CreatePostsScreen = ({ navigation }) => {
-  //  const isFocused = useIsFocused();
+  //const isFocused = useIsFocused();
 
   const [permissionCam, requestPermissionCam] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState(null);
   const [postTitles, setPostTitles] = useState(basePost);
   const [disableBtn, setDisableBtn] = useState(true);
+  const { userId, nickName, avatar } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -44,17 +55,27 @@ const CreatePostsScreen = ({ navigation }) => {
         setErrorMsg("Permission to access location was denied");
         return;
       }
+
+      const location = await Location.getCurrentPositionAsync({});
+
+      setPostTitles((prevState) => ({
+        ...prevState,
+        gps: {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        },
+      }));
     })();
   }, []);
 
   useEffect(() => {
-    if (
-      postTitles.namePlace.length !== 0 &&
-      postTitles.nameLocation.length !== 0 &&
-      postTitles.photo.length !== 0
-    ) {
-      setDisableBtn(false);
-    }
+    setDisableBtn(
+      !(
+        postTitles.namePlace.length > 0 &&
+        postTitles.nameLocation.length > 0 &&
+        postTitles.photo.length > 0
+      )
+    );
   }, [postTitles]);
 
   const logBack = ({ navigation }) => {
@@ -79,29 +100,34 @@ const CreatePostsScreen = ({ navigation }) => {
   }
 
   const takePhoto = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-      return;
-    }
     const { uri } = await camera.takePictureAsync();
-
-    const location = await Location.getCurrentPositionAsync();
-
+    //console.log("uri:", uri);
     setPostTitles((prevState) => ({
       ...prevState,
-      gps: {
-        latitude: `${location.coords.latitude}`,
-        longitude: `${location.coords.longitude}`,
-      },
-
       photo: uri,
+      nickName: nickName,
+      userId: userId,
+      avatar: avatar,
     }));
   };
 
-  const publickPost = () => {
-    //console.log("postTitles:", postTitles);
-    navigation.navigate("DefaultScreen", postTitles);
+  const publickPost = async () => {
+    const fileId = nanoid();
+
+    const uploadFotoFromServer = await uploadPhotoToServer(
+      postTitles.photo,
+      fileId
+    );
+
+    setPostTitles((prevState) => ({
+      ...prevState,
+      photo: uploadFotoFromServer,
+    }));
+
+    await uploadPostToServer(postTitles);
+
+    navigation.navigate("DefaultScreen");
+
     setPostTitles(basePost);
     setDisableBtn(true);
   };

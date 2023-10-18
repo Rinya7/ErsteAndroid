@@ -10,22 +10,50 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSingUpUser } from "../redux/auth/authOperations";
+import { pickImage, takePhoto } from "../utilites/pickImage";
+import { nanoid } from "nanoid";
+import uploadAvatarToServer from "../firebase/utilites/uploadAvatarToServer";
 
-const baseLogState = {
-  name: "",
+const baseState = {
+  nickName: "",
   email: "",
   password: "",
+  avatar: null,
 };
 
 const RegistrationScreen = () => {
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
-  const [logState, setLogState] = useState(baseLogState);
-  const signIn = () => {
-    navigation.navigate("Home");
-    console.log(logState);
-    setLogState(baseLogState);
+  const [state, setState] = useState(baseState);
+
+  const addAvatar = async () => {
+    const aserAvatar = await takePhoto();
+    setState((prevState) => ({ ...prevState, avatar: aserAvatar }));
+  };
+
+  const signIn = async () => {
+    try {
+      const fileAvatarId = nanoid();
+      const uploadAvatarFromServer = await uploadAvatarToServer(
+        state.avatar,
+        fileAvatarId
+      );
+
+      setState((prevState) => ({
+        ...prevState,
+        avatar: uploadAvatarFromServer,
+      }));
+      dispatch(authSingUpUser(state));
+      setState(baseState);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -41,23 +69,19 @@ const RegistrationScreen = () => {
         >
           <View style={styles.form}>
             <View style={[styles.divAva]}>
-              <Image
-                source={require("../assets/images/default.jpg")}
-                style={[
-                  styles.avatar,
-                  {
-                    transform: [{ translateY: -50 }],
-                  },
-                ]}
-              ></Image>
-              <TouchableOpacity
-                style={[
-                  styles.add,
-                  {
-                    transform: [{ translateX: 60 }, { translateY: 30 }],
-                  },
-                ]}
-              >
+              {state.avatar && state.avatar.length > 0 ? (
+                <Image
+                  source={{ uri: state.avatar }}
+                  style={styles.avatar}
+                ></Image>
+              ) : (
+                <Image
+                  source={require("../assets/images/default.jpg")}
+                  style={styles.avatar}
+                ></Image>
+              )}
+
+              <TouchableOpacity style={styles.add} onPress={addAvatar}>
                 <Image source={require("../assets/images/add.png")}></Image>
               </TouchableOpacity>
             </View>
@@ -70,9 +94,9 @@ const RegistrationScreen = () => {
                 textContentType={"name"}
                 autoComplete={"name"}
                 textAlign={"left"}
-                value={logState.name}
+                value={state.nickName}
                 onChangeText={(value) =>
-                  setLogState((prevState) => ({ ...prevState, name: value }))
+                  setState((prevState) => ({ ...prevState, nickName: value }))
                 }
               />
               <TextInput
@@ -81,9 +105,9 @@ const RegistrationScreen = () => {
                 textContentType={"emailAddress"}
                 autoComplete={"email"}
                 textAlign={"left"}
-                value={logState.email}
+                value={state.email}
                 onChangeText={(value) =>
-                  setLogState((prevState) => ({ ...prevState, email: value }))
+                  setState((prevState) => ({ ...prevState, email: value }))
                 }
               />
               <TextInput
@@ -93,9 +117,9 @@ const RegistrationScreen = () => {
                 autoComplete="password"
                 textAlign={"left"}
                 secureTextEntry={true}
-                value={logState.password}
+                value={state.password}
                 onChangeText={(value) =>
-                  setLogState((prevState) => ({
+                  setState((prevState) => ({
                     ...prevState,
                     password: value,
                   }))
@@ -141,9 +165,11 @@ const styles = StyleSheet.create({
   avatar: {
     borderRadius: 16,
     position: "absolute",
+    transform: [{ translateY: -50 }],
   },
   add: {
     position: "absolute",
+    transform: [{ translateX: 60 }, { translateY: 30 }],
   },
   textTitle: {
     color: "rgba(33, 33, 33, 1)",

@@ -8,10 +8,13 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from "react-native";
 
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSingInUser } from "../redux/auth/authOperations";
 
 const initialState = {
   email: "",
@@ -21,10 +24,10 @@ const initialState = {
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [state, setState] = useState(initialState);
+  dispatch = useDispatch();
 
   const signIn = () => {
-    navigation.navigate("Home");
-    console.log(state);
+    dispatch(authSingInUser(state));
     setState(initialState);
   };
   return (
