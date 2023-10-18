@@ -23,6 +23,7 @@ import { getFormattedDate } from "../../helpers/dateUtils";
 
 const CommentsScreen = ({ route, navigation }) => {
   const { avatar, nickName } = useSelector((state) => state.auth);
+  console.log("route.params:", route.params);
   const { postId, photo } = route.params;
   const [comment, setComment] = useState("");
   const [allComment, setAllComment] = useState([]);
@@ -37,7 +38,6 @@ const CommentsScreen = ({ route, navigation }) => {
       postId,
       comment,
       nickName,
-
       dateWriteComment,
       avatar
     );

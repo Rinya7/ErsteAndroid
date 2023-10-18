@@ -23,7 +23,7 @@ const baseState = {
   nickName: "",
   email: "",
   password: "",
-  avatar: "../assets/images/avatarDefault.png",
+  avatar: null,
 };
 
 const RegistrationScreen = () => {
@@ -69,7 +69,7 @@ const RegistrationScreen = () => {
         >
           <View style={styles.form}>
             <View style={[styles.divAva]}>
-              {state.avatar.length > 0 ? (
+              {state.avatar && state.avatar.length > 0 ? (
                 <Image
                   source={{ uri: state.avatar }}
                   style={styles.avatar}

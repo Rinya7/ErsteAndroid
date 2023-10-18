@@ -36,6 +36,7 @@ const basePost = {
   nickName: "",
   userId: "",
   avatar: "",
+  likes: null,
 };
 
 const CreatePostsScreen = ({ navigation }) => {

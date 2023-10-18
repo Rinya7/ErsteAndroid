@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 
-import allPostByUser from "../../firebase/utilites/uploadAllPosts";
+import allPostByServer from "../../firebase/utilites/allPostByServer";
 import { useSelector } from "react-redux";
 
 const DefaultPostsScreen = ({ navigation }) => {
@@ -18,7 +18,7 @@ const DefaultPostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    allPostByUser(setPosts);
+    allPostByServer(setPosts);
   }, []);
 
   return (
@@ -66,7 +66,8 @@ const DefaultPostsScreen = ({ navigation }) => {
                       <Text style={styles.reviews}>0</Text>
                       <TouchableOpacity
                         style={styles.feedback}
-                        onPress={() => navigation.navigate("ProfileScreen")}
+                        //onPress={() => navigation.navigate("ProfileScreen")}
+                        onPress={() => console.log("make like")}
                       >
                         <Image
                           source={require("../../assets/images/thumbs-up.png")}
@@ -135,22 +136,22 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },
-  divAva: {
-    alignItems: "center",
-  },
-  avatar: {
-    borderRadius: 16,
-    position: "absolute",
-  },
+  //  divAva: {
+  //    alignItems: "center",
+  //  },
+  //  avatar: {
+  //    borderRadius: 16,
+  //    position: "absolute",
+  //  },
 
-  textTitle: {
-    color: "rgba(33, 33, 33, 1)",
-    textAlign: "center",
-    fontSize: 30,
-    marginTop: 92,
-    marginBottom: 33,
-    fontFamily: "Roboto-Medium",
-  },
+  //  textTitle: {
+  //    color: "rgba(33, 33, 33, 1)",
+  //    textAlign: "center",
+  //    fontSize: 30,
+  //    marginTop: 92,
+  //    marginBottom: 33,
+  //    fontFamily: "Roboto-Medium",
+  //  },
   post: {
     marginBottom: 32,
   },

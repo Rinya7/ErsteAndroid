@@ -11,8 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
-  //  const { userId, nickName, avatar } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
 
   const logBack = ({ navigation }) => {
@@ -22,7 +20,9 @@ const Home = () => {
   const logOut = () => {
     dispatch(authSingOutUser());
   };
+
   const navigation = useNavigation();
+
   return (
     <Tab.Navigator
       screenOptions={{

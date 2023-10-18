@@ -1,7 +1,7 @@
 import { onSnapshot, collection } from "firebase/firestore";
-import { db } from "../../firebase/config";
+import { db } from "../config";
 
-const allPostByUser = async (setPosts) => {
+const allPostByServer = async (setPosts) => {
   try {
     await onSnapshot(collection(db, "posts"), (data) =>
       setPosts(data.docs.map((doc) => ({ ...doc.data(), postId: doc.id })))
@@ -11,4 +11,4 @@ const allPostByUser = async (setPosts) => {
   }
 };
 
-export default allPostByUser;
+export default allPostByServer;
