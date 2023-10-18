@@ -11,8 +11,10 @@ import { authSlice } from "./authReducer";
 const { updateUserProfile, authSingOut, authStateChange } = authSlice.actions;
 
 const authSingUpUser =
-  (email, password, nickName, uploadAvatarFromServer) => async (dispatch) => {
+  ({ state, uploadAvatarFromServer }) =>
+  async (dispatch) => {
     try {
+      const { email, password, nickName } = state;
       await createUserWithEmailAndPassword(auth, email, password);
       const user = await auth.currentUser;
 
@@ -20,7 +22,6 @@ const authSingUpUser =
         displayName: nickName,
         photoURL: uploadAvatarFromServer,
       });
-      //  const updateUser = await auth.currentUser;
       const { uid, displayName, photoURL } = await auth.currentUser;
 
       dispatch(

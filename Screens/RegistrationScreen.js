@@ -45,22 +45,7 @@ const RegistrationScreen = () => {
         fileAvatarId
       );
 
-      //  НУЖНО ИСПРАИТЬ ЗАГРУЗКУ АВАТАРА НА СЕРВЕР
-      //  console.log("uploadAvatarFromServer", uploadAvatarFromServer);
-      //  setState((prevState) => ({
-      //    ...prevState,
-      //    avatar: uploadAvatarFromServer,
-      //  }));
-
-      //  console.log("state.avatar", state.avatar);
-      dispatch(
-        authSingUpUser(
-          state.email,
-          state.password,
-          state.nickName,
-          uploadAvatarFromServer
-        )
-      );
+      dispatch(authSingUpUser({ state, uploadAvatarFromServer }));
       setState(baseState);
     } catch (error) {
       console.log(error.message);
