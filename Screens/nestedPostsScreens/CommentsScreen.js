@@ -20,13 +20,14 @@ import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useEffect } from "react";
 import { db } from "../../firebase/config";
 import { getFormattedDate } from "../../helpers/dateUtils";
+import { uploadTotalCommentsNumber } from "../../firebase/utilites/uploadToServer";
 
 const CommentsScreen = ({ route, navigation }) => {
   const { avatar, nickName } = useSelector((state) => state.auth);
-  console.log("route.params:", route.params);
   const { postId, photo } = route.params;
   const [comment, setComment] = useState("");
   const [allComment, setAllComment] = useState([]);
+  
 
   useEffect(() => {
     allCommentsFromServer();
@@ -41,6 +42,7 @@ const CommentsScreen = ({ route, navigation }) => {
       dateWriteComment,
       avatar
     );
+    uploadTotalCommentsNumber(postId, allComment.length + 1);
     //navigation.navigate("DefaultScreen");
     setComment("");
   };
@@ -50,7 +52,12 @@ const CommentsScreen = ({ route, navigation }) => {
       const postRef = doc(db, "posts", postId);
       const commentsCollection = collection(postRef, "comments");
       await onSnapshot(commentsCollection, (data) =>
-        setAllComment(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        setAllComment(
+          data.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }))
+        )
       );
     } catch (error) {
       console.error("Error download colection:", error);

@@ -16,10 +16,15 @@ const DefaultPostsScreen = ({ navigation }) => {
   const { nickName, avatar, email } = useSelector((state) => state.auth);
 
   const [posts, setPosts] = useState([]);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     allPostByServer(setPosts);
   }, []);
+
+  //  const sendLikes = async () => {
+  //    await uploadLikesToServer(likes);
+  //  };
 
   return (
     <View
@@ -63,7 +68,9 @@ const DefaultPostsScreen = ({ navigation }) => {
                           source={require("../../assets/images/message.png")}
                         ></Image>
                       </TouchableOpacity>
-                      <Text style={styles.reviews}>0</Text>
+                      <Text style={styles.reviews}>
+                        {item.totalComments || 0}
+                      </Text>
                       <TouchableOpacity
                         style={styles.feedback}
                         //onPress={() => navigation.navigate("ProfileScreen")}
@@ -73,7 +80,7 @@ const DefaultPostsScreen = ({ navigation }) => {
                           source={require("../../assets/images/thumbs-up.png")}
                         ></Image>
                       </TouchableOpacity>
-                      <Text style={styles.likes}>0</Text>
+                      <Text style={styles.likes}>{likes}</Text>
                     </View>
                     <TouchableOpacity
                       onPress={() => navigation.navigate("Map", item.gps)}

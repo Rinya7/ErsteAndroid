@@ -90,7 +90,9 @@ const ProfileScreen = ({ navigation }) => {
                               source={require("../assets/images/message.png")}
                             ></Image>
                           </TouchableOpacity>
-                          <Text style={styles.reviews}>0</Text>
+                          <Text style={styles.reviews}>
+                            {item.totalComments || 0}
+                          </Text>
                           <TouchableOpacity
                             style={styles.feedback}
                             onPress={() => console.log("make like")}
