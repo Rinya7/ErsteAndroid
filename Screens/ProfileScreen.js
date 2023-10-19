@@ -98,10 +98,10 @@ const ProfileScreen = ({ navigation }) => {
                             onPress={() => console.log("make like")}
                           >
                             <Image
-                              source={require("../assets/images/thumbs-up.png")}
+                              source={require("../assets/images/thumbsUp.png")}
                             ></Image>
                           </TouchableOpacity>
-                          <Text style={styles.likes}>0</Text>
+                          <Text style={styles.likes}>{item.likes}</Text>
                         </View>
                         <TouchableOpacity
                           onPress={() => navigation.navigate("Map", item.gps)}

@@ -45,11 +45,7 @@ const RegistrationScreen = () => {
         fileAvatarId
       );
 
-      setState((prevState) => ({
-        ...prevState,
-        avatar: uploadAvatarFromServer,
-      }));
-      dispatch(authSingUpUser(state));
+      dispatch(authSingUpUser({ state, uploadAvatarFromServer }));
       setState(baseState);
     } catch (error) {
       console.log(error.message);

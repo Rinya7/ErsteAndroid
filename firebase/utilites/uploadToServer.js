@@ -1,12 +1,12 @@
 import { db } from "../config";
 import { doc, updateDoc } from "firebase/firestore";
 
-const uploadLikesToServer = async (postId, like) => {
+const uploadLikesToServer = async (postId, likes, whoLiked) => {
   try {
     const postRef = doc(db, "posts", postId);
 
-    await updateDoc(postRef, { like });
-    console.log("Comment added successfully!");
+    await updateDoc(postRef, { likes, whoLiked });
+    console.log("Likes added successfully!");
   } catch (error) {
     console.error("Error download colection:", error);
   }

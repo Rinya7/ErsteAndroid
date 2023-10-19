@@ -9,22 +9,53 @@ import {
   Platform,
 } from "react-native";
 
-import allPostByServer from "../../firebase/utilites/allPostByServer";
+import {
+  allPostByServer,
+  loadPostByIdFromServer,
+} from "../../firebase/utilites/loadPostByServer";
 import { useSelector } from "react-redux";
+import { uploadLikesToServer } from "../../firebase/utilites/uploadToServer";
 
 const DefaultPostsScreen = ({ navigation }) => {
-  const { nickName, avatar, email } = useSelector((state) => state.auth);
+  const { nickName, avatar, email, userId } = useSelector(
+    (state) => state.auth
+  );
 
   const [posts, setPosts] = useState([]);
-  const [likes, setLikes] = useState(0);
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [allWhoLiked, setAllWhoLiked] = useState([]);
 
   useEffect(() => {
     allPostByServer(setPosts);
   }, []);
 
-  //  const sendLikes = async () => {
-  //    await uploadLikesToServer(likes);
-  //  };
+  const sendLikes = async (postId) => {
+    const { likes, whoLiked } = loadPostByIdFromServer(postId);
+    setTotalLikes(likes);
+    setAllWhoLiked(whoLiked);
+
+    console.log("totalLikes", totalLikes);
+    console.log("allWhoLiked", allWhoLiked);
+
+    console.log("whoLiked.indexOf(userId)", allWhoLiked.indexOf(userId));
+
+    if (allWhoLiked.indexOf(userId) === -1) {
+      setTotalLikes(totalLikes + 1);
+      const updatedAllWhoLiked = [...allWhoLiked, userId];
+      setAllWhoLiked(updatedAllWhoLiked);
+
+      console.log("totalLikes", totalLikes);
+      console.log("allWhoLiked", allWhoLiked);
+
+      await uploadLikesToServer(postId, totalLikes, allWhoLiked);
+    } else {
+      setTotalLikes(totalLikes - 1);
+      const updatedAllWhoLiked = [...allWhoLiked];
+      updatedAllWhoLiked.splice(allWhoLiked.indexOf(userId), 1);
+      setAllWhoLiked(updatedAllWhoLiked);
+      await uploadLikesToServer(postId, totalLikes, allWhoLiked);
+    }
+  };
 
   return (
     <View
@@ -73,14 +104,19 @@ const DefaultPostsScreen = ({ navigation }) => {
                       </Text>
                       <TouchableOpacity
                         style={styles.feedback}
-                        //onPress={() => navigation.navigate("ProfileScreen")}
-                        onPress={() => console.log("make like")}
+                        onPress={() => sendLikes(item.postId)}
                       >
-                        <Image
-                          source={require("../../assets/images/thumbs-up.png")}
-                        ></Image>
+                        {false ? (
+                          <Image
+                            source={require("../../assets/images/thumbsUpGreen.png")}
+                          ></Image>
+                        ) : (
+                          <Image
+                            source={require("../../assets/images/thumbsUp.png")}
+                          ></Image>
+                        )}
                       </TouchableOpacity>
-                      <Text style={styles.likes}>{likes}</Text>
+                      <Text style={styles.likes}>{item.likes}</Text>
                     </View>
                     <TouchableOpacity
                       onPress={() => navigation.navigate("Map", item.gps)}

@@ -33,10 +33,12 @@ const basePost = {
   nameLocation: "",
   gps: { latitude: "", longitude: "" },
   photo: "",
+
   nickName: "",
   userId: "",
   avatar: "",
-  likes: null,
+  likes: 0,
+  whoLiked: [],
 };
 
 const CreatePostsScreen = ({ navigation }) => {
@@ -101,6 +103,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const { uri } = await camera.takePictureAsync();
+
     //console.log("uri:", uri);
     setPostTitles((prevState) => ({
       ...prevState,
@@ -112,24 +115,24 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   const publickPost = async () => {
-    const fileId = nanoid();
+    try {
+      const fileId = nanoid();
 
-    const uploadFotoFromServer = await uploadPhotoToServer(
-      postTitles.photo,
-      fileId
-    );
+      const uploadFotoFromServer = await uploadPhotoToServer(
+        postTitles.photo,
+        fileId
+      );
 
-    setPostTitles((prevState) => ({
-      ...prevState,
-      photo: uploadFotoFromServer,
-    }));
+      await uploadPostToServer(postTitles, uploadFotoFromServer, fileId);
 
-    await uploadPostToServer(postTitles);
+      navigation.navigate("DefaultScreen");
 
-    navigation.navigate("DefaultScreen");
-
-    setPostTitles(basePost);
-    setDisableBtn(true);
+      setPostTitles(basePost);
+      setDisableBtn(true);
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      // Обработка ошибок при загрузке фото
+    }
   };
 
   return (
